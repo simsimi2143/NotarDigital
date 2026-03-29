@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="bg-white p-6 rounded shadow max-w-2xl">
+    <h1 class="text-2xl font-bold mb-4">Servicio</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">{{ form.nombre.label }} {{ form.nombre(class="w-full border p-2 rounded") }}</div>
+        <div class="mb-3">{{ form.descripcion.label }} {{ form.descripcion(class="w-full border p-2 rounded") }}</div>
+        <div class="mb-3">{{ form.tarifa.label }} {{ form.tarifa(class="w-full border p-2 rounded") }}</div>
+        <div class="mb-3">{{ form.activo() }} {{ form.activo.label }}</div>
+        {{ form.submit(class="bg-blue-700 text-white px-4 py-2 rounded") }}
+    </form>
+</div>
+{% endblock %}

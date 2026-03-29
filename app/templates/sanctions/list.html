@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Gestión de Sanciones</h1>
+    <a href="/admin/sanctions/new" class="bg-blue-700 text-white px-4 py-2 rounded">Nueva sanción</a>
+</div>
+
+<form method="GET" class="mb-4">
+    <input type="text" name="q" value="{{ q }}" placeholder="Buscar por funcionario" class="border rounded p-2">
+    <button class="bg-gray-700 text-white px-4 py-2 rounded">Buscar</button>
+</form>
+
+<div class="bg-white shadow rounded overflow-hidden">
+    <table class="w-full">
+        <thead class="bg-gray-50 border-b">
+            <tr>
+                <th class="p-3 text-left">Funcionario</th>
+                <th class="p-3 text-left">Fecha</th>
+                <th class="p-3 text-left">Publicada</th>
+                <th class="p-3 text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in sanctions %}
+            <tr class="border-b">
+                <td class="p-3">{{ users[s.funcionario_id].nombre if users.get(s.funcionario_id) else 'N/D' }}</td>
+                <td class="p-3">{{ s.fecha_sancion.strftime('%d-%m-%Y') }}</td>
+                <td class="p-3">
+                    {% if s.publica %}
+                        <span class="text-green-600 font-semibold">Sí</span>
+                    {% else %}
+                        <span class="text-red-600 font-semibold">No</span>
+                    {% endif %}
+                </td>
+                <td class="p-3 text-center space-x-2">
+                    <a href="/admin/sanctions/{{ s.id }}/edit" class="text-blue-700 hover:underline">Editar</a>
+                    <form action="/admin/sanctions/{{ s.id }}/toggle" method="POST" class="inline">
+                        <button class="text-purple-700 hover:underline">
+                            {% if s.publica %}Despublicar{% else %}Publicar{% endif %}
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

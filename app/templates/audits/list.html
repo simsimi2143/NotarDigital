@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-bold">Auditoría</h1>
+    <a href="/admin/audits/export" class="bg-green-700 text-white px-4 py-2 rounded">Exportar CSV</a>
+</div>
+
+<form method="GET" class="mb-4 flex gap-2">
+    <input type="text" name="modulo" value="{{ modulo }}" placeholder="Filtrar por módulo" class="border p-2 rounded">
+    <input type="text" name="accion" value="{{ accion }}" placeholder="Filtrar por acción" class="border p-2 rounded">
+    <button class="bg-gray-700 text-white px-4 py-2 rounded">Filtrar</button>
+</form>
+
+<table class="w-full bg-white rounded shadow">
+    <tr class="border-b">
+        <th class="p-2 text-left">Fecha</th>
+        <th class="p-2 text-left">Módulo</th>
+        <th class="p-2 text-left">Acción</th>
+        <th class="p-2 text-left">Detalle</th>
+    </tr>
+    {% for log in logs %}
+    <tr class="border-b">
+        <td class="p-2">{{ log.fecha.strftime('%d-%m-%Y %H:%M:%S') }}</td>
+        <td class="p-2">{{ log.modulo }}</td>
+        <td class="p-2">{{ log.accion }}</td>
+        <td class="p-2">{{ log.detalle }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

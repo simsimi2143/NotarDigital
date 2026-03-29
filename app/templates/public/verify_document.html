@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <h1 class="text-3xl font-bold mb-6">Verificación de documento</h1>
+
+    <form method="GET" class="bg-white p-6 rounded shadow mb-6">
+        <label class="block font-semibold mb-2">Código de verificación</label>
+        <div class="flex gap-2">
+            <input type="text" name="code" placeholder="Ingrese código" class="border p-2 rounded w-full">
+            <button class="bg-blue-700 text-white px-4 py-2 rounded">Verificar</button>
+        </div>
+    </form>
+
+    {% if document %}
+    <div class="bg-white p-6 rounded shadow">
+        <h2 class="text-xl font-bold mb-4 text-green-700">Documento encontrado</h2>
+        <div class="space-y-2">
+            <p><strong>Folio:</strong> {{ document.folio }}</p>
+            <p><strong>Título:</strong> {{ document.titulo }}</p>
+            <p><strong>Estado:</strong> {{ document.estado }}</p>
+            <p><strong>Proveedor firma:</strong> {{ document.provider_signature or 'No informado' }}</p>
+            <p><strong>Fecha firma:</strong> {{ document.signed_at.strftime('%d-%m-%Y %H:%M') if document.signed_at else 'No disponible' }}</p>
+            <p><strong>Hash:</strong> {{ document.hash_signed_file }}</p>
+        </div>
+
+        {% if document.copy_file_path %}
+        <div class="mt-4">
+            <a href="/copias/{{ document.copy_file_path }}" class="bg-blue-700 text-white px-4 py-2 rounded">
+                Descargar copia electrónica
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    {% elif request.args.get('code') %}
+    <div class="bg-white p-6 rounded shadow">
+        <p class="text-red-600 font-semibold">No se encontró un documento con ese código.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

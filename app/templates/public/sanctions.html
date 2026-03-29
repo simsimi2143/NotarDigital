@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-6">Funcionarios sancionados</h1>
+
+<div class="space-y-4">
+    {% for s in sanctions %}
+    <div class="bg-white p-4 rounded shadow">
+        <p><strong>Funcionario:</strong> {{ users[s.funcionario_id].nombre if users.get(s.funcionario_id) else 'No disponible' }}</p>
+        <p><strong>Cargo:</strong> {{ users[s.funcionario_id].cargo if users.get(s.funcionario_id) else '' }}</p>
+        <p><strong>Motivo:</strong> {{ s.motivo }}</p>
+        <p><strong>Resolución:</strong> {{ s.resolucion or 'No informada' }}</p>
+        <p><strong>Fecha sanción:</strong> {{ s.fecha_sancion.strftime('%d-%m-%Y') }}</p>
+    </div>
+    {% else %}
+    <div class="bg-white p-4 rounded shadow">
+        <p>No hay sanciones publicadas.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

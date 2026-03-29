@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Notaría Digital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+    <nav class="bg-blue-900 text-white p-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="/" class="font-bold text-lg">Notaría Digital</a>
+
+            <div class="space-x-4 text-sm">
+                <a href="/servicios" class="hover:underline">Servicios</a>
+                <a href="/reclamos" class="hover:underline">Reclamos</a>
+                <a href="/sanciones" class="hover:underline">Sanciones</a>
+                <a href="/verificar-documento" class="hover:underline">Verificar documento</a>
+
+                {% if current_user.is_authenticated %}
+                    <a href="/admin" class="hover:underline">Panel</a>
+                    <a href="/documents" class="hover:underline">Documentos</a>
+                    <a href="/admin/complaints" class="hover:underline">Reclamos Admin</a>
+                    <a href="/auth/logout" class="hover:underline text-red-300">Salir</a>
+                {% else %}
+                    <a href="/auth/login" class="hover:underline">Acceso</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto p-6">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="mb-4 p-3 rounded bg-white shadow border-l-4
+                    {% if category == 'success' %} border-green-500
+                    {% elif category == 'danger' %} border-red-500
+                    {% elif category == 'warning' %} border-yellow-500
+                    {% else %} border-blue-500 {% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="bg-white rounded shadow p-8 mb-8">
+    <h1 class="text-4xl font-bold text-blue-900 mb-4">
+        {{ office.nombre_notaria if office else 'Notaría Digital' }}
+    </h1>
+    <p class="text-lg text-gray-700 mb-2">
+        Plataforma digital de atención, consulta pública y gestión documental.
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 text-sm">
+        <div>
+            <p><strong>Dirección:</strong> {{ office.direccion if office else '' }}</p>
+            <p><strong>Comuna:</strong> {{ office.comuna if office else '' }}</p>
+            <p><strong>Región:</strong> {{ office.region if office else '' }}</p>
+        </div>
+        <div>
+            <p><strong>Correo oficial:</strong> {{ office.correo_oficial if office else '' }}</p>
+            <p><strong>Teléfono:</strong> {{ office.telefono if office else '' }}</p>
+            <p><strong>Horario:</strong> {{ office.horario_apertura if office else '' }} - {{ office.horario_cierre if office else '' }}</p>
+        </div>
+    </div>
+
+    <div class="mt-6 flex flex-wrap gap-3">
+        <a href="/servicios" class="bg-blue-700 text-white px-4 py-2 rounded">Ver servicios</a>
+        <a href="/reclamos" class="bg-gray-700 text-white px-4 py-2 rounded">Ingresar reclamo</a>
+        <a href="/verificar-documento" class="bg-green-700 text-white px-4 py-2 rounded">Verificar documento</a>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-white p-6 rounded shadow">
+        <h2 class="text-xl font-bold mb-2">Consulta desde casa</h2>
+        <p class="text-gray-700">Verifique documentos, consulte copias electrónicas y acceda a información pública sin costo.</p>
+    </div>
+    <div class="bg-white p-6 rounded shadow">
+        <h2 class="text-xl font-bold mb-2">Transparencia</h2>
+        <p class="text-gray-700">Acceda a servicios, tarifas, horarios, correo oficial y listado de sanciones publicadas.</p>
+    </div>
+    <div class="bg-white p-6 rounded shadow">
+        <h2 class="text-xl font-bold mb-2">Gestión digital</h2>
+        <p class="text-gray-700">Resguardo documental, trazabilidad, reclamos y copias electrónicas verificables.</p>
+    </div>
+</div>
+
+<h2 class="text-2xl font-bold mb-4">Servicios disponibles</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {% for service in services %}
+    <div class="bg-white p-4 rounded shadow">
+        <h3 class="font-bold text-lg">{{ service.nombre }}</h3>
+        <p class="text-gray-700">{{ service.descripcion }}</p>
+        <p class="mt-2 text-blue-700 font-bold">${{ service.tarifa }}</p>
+    </div>
+    {% else %}
+    <div class="bg-white p-4 rounded shadow">
+        <p>No hay servicios cargados aún.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

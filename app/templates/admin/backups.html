@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Respaldos del Sistema</h1>
+    <form method="POST" action="/admin/backups/create">
+        <button class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800">
+            Generar nuevo backup
+        </button>
+    </form>
+</div>
+
+<div class="bg-white shadow rounded p-4">
+    {% if files %}
+        <ul class="space-y-3">
+            {% for file in files %}
+            <li class="flex justify-between items-center border-b pb-2">
+                <span>{{ file }}</span>
+                <a href="/admin/backups/download/{{ file }}" class="text-blue-700 hover:underline">
+                    Descargar
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay backups generados aún.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="bg-white p-6 rounded shadow max-w-2xl">
+    <h1 class="text-2xl font-bold mb-4">Nuevo documento</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">{{ form.tipo_documento.label }} {{ form.tipo_documento(class="w-full border p-2 rounded") }}</div>
+        <div class="mb-3">{{ form.titulo.label }} {{ form.titulo(class="w-full border p-2 rounded") }}</div>
+        <div class="mb-3">{{ form.solicitante_nombre.label }} {{ form.solicitante_nombre(class="w-full border p-2 rounded") }}</div>
+        <div class="mb-3">{{ form.solicitante_rut.label }} {{ form.solicitante_rut(class="w-full border p-2 rounded") }}</div>
+        <div class="mb-3">{{ form.contenido_resumen.label }} {{ form.contenido_resumen(class="w-full border p-2 rounded") }}</div>
+        <div class="mb-3">{{ form.original_file.label }} {{ form.original_file(class="w-full") }}</div>
+        {{ form.submit(class="bg-blue-700 text-white px-4 py-2 rounded") }}
+    </form>
+</div>
+{% endblock %}

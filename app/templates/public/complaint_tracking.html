@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Seguimiento de reclamo</h1>
+<form method="GET" class="mb-4">
+    <input type="text" name="folio" placeholder="Ingrese folio" class="border p-2 rounded">
+    <button class="bg-blue-700 text-white px-4 py-2 rounded">Buscar</button>
+</form>
+
+{% if complaint %}
+<div class="bg-white p-4 rounded shadow">
+    <p><strong>Folio:</strong> {{ complaint.folio }}</p>
+    <p><strong>Estado:</strong> {{ complaint.estado }}</p>
+    <p><strong>Descripción:</strong> {{ complaint.descripcion }}</p>
+    <p><strong>Respuesta:</strong> {{ complaint.respuesta or 'Sin respuesta aún' }}</p>
+</div>
+{% endif %}
+{% endblock %}

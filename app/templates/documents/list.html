@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-bold">Documentos</h1>
+    <a href="/documents/new" class="bg-blue-700 text-white px-4 py-2 rounded">Nuevo documento</a>
+</div>
+
+<form method="GET" class="mb-4 flex flex-wrap gap-2">
+    <input type="text" name="folio" value="{{ folio }}" placeholder="Buscar por folio" class="border rounded p-2">
+    <select name="estado" class="border rounded p-2">
+        <option value="">Todos los estados</option>
+        <option value="borrador" {% if estado == 'borrador' %}selected{% endif %}>Borrador</option>
+        <option value="en_revision" {% if estado == 'en_revision' %}selected{% endif %}>En revisión</option>
+        <option value="pendiente_firma_externa" {% if estado == 'pendiente_firma_externa' %}selected{% endif %}>Pendiente firma</option>
+        <option value="firmado" {% if estado == 'firmado' %}selected{% endif %}>Firmado</option>
+        <option value="publicado" {% if estado == 'publicado' %}selected{% endif %}>Publicado</option>
+    </select>
+    <button class="bg-gray-700 text-white px-4 py-2 rounded">Filtrar</button>
+</form>
+
+<table class="w-full bg-white shadow rounded">
+    <tr class="border-b">
+        <th class="p-2 text-left">Folio</th>
+        <th class="p-2 text-left">Título</th>
+        <th class="p-2 text-left">Estado</th>
+        <th class="p-2">Acciones</th>
+    </tr>
+    {% for doc in docs %}
+    <tr class="border-b">
+        <td class="p-2">{{ doc.folio }}</td>
+        <td class="p-2">{{ doc.titulo }}</td>
+        <td class="p-2">{{ doc.estado }}</td>
+        <td class="p-2 space-x-2">
+            <a href="/documents/{{ doc.id }}" class="text-blue-700">Ver</a>
+            {% if doc.estado != 'firmado' %}
+            <a href="/documents/{{ doc.id }}/edit" class="text-purple-700">Editar</a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Servicios y tarifas</h1>
+<div class="space-y-3">
+    {% for service in services %}
+    <div class="bg-white p-4 rounded shadow">
+        <h2 class="font-bold">{{ service.nombre }}</h2>
+        <p>{{ service.descripcion }}</p>
+        <p class="text-blue-700 font-bold">${{ service.tarifa }}</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

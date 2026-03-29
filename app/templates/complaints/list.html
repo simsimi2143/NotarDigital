@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Reclamos</h1>
+
+<div class="bg-white shadow rounded overflow-hidden">
+    <table class="w-full">
+        <thead class="bg-gray-50 border-b">
+            <tr>
+                <th class="p-3 text-left">Folio</th>
+                <th class="p-3 text-left">Reclamante</th>
+                <th class="p-3 text-left">Estado</th>
+                <th class="p-3 text-left">Fecha</th>
+                <th class="p-3 text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for complaint in complaints %}
+            <tr class="border-b">
+                <td class="p-3">{{ complaint.folio }}</td>
+                <td class="p-3">{{ complaint.nombre_reclamante }}</td>
+                <td class="p-3">{{ complaint.estado }}</td>
+                <td class="p-3">{{ complaint.fecha_creacion.strftime('%d-%m-%Y %H:%M') }}</td>
+                <td class="p-3 text-center">
+                    <a href="/admin/complaints/{{ complaint.id }}" class="text-blue-700 hover:underline">Ver</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

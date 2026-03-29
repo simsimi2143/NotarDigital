@@ -16,14 +16,58 @@
         <div>
             <p><strong>Correo oficial:</strong> {{ office.correo_oficial if office else '' }}</p>
             <p><strong>Teléfono:</strong> {{ office.telefono if office else '' }}</p>
-            <p><strong>Horario:</strong> {{ office.horario_apertura if office else '' }} - {{ office.horario_cierre if office else '' }}</p>
+            <p>
+                <strong>Horario:</strong> 
+                {% if office %}
+                    {% set dias = (office.dias_atencion or 'lunes,martes,miercoles,jueves,viernes').split(',') %}
+                    
+                    {# Horario entre semana #}
+                    {% if office.tipo_horario == 'turnos' and office.turno_manana_inicio and office.turno_tarde_fin %}
+                        Lun-Vie: {{ office.turno_manana_inicio }} - {{ office.turno_manana_fin }} / {{ office.turno_tarde_inicio }} - {{ office.turno_tarde_fin }}
+                    {% elif office.tipo_horario == 'colacion' and office.colacion_apertura and office.colacion_cierre %}
+                        Lun-Vie: {{ office.colacion_apertura }} - {{ office.colacion_cierre }}
+                        {% if office.colacion_inicio and office.colacion_fin %}
+                            <span class="text-gray-500">(Colación: {{ office.colacion_inicio }} - {{ office.colacion_fin }})</span>
+                        {% endif %}
+                    {% else %}
+                        Lun-Vie: {{ office.hora_apertura or office.horario_apertura or '09:00' }} - {{ office.hora_cierre or office.horario_cierre or '17:00' }}
+                    {% endif %}
+                    
+                    {# Horario sábados #}
+                    {% if 'sabado' in dias %}
+                        <br><span class="text-gray-600">Sáb:</span> 
+                        {% if office.sabado_inicio and office.sabado_fin %}
+                            {{ office.sabado_inicio }} - {{ office.sabado_fin }}
+                            {% if office.tipo_sabado == 'medio' %}
+                                <span class="text-gray-500 text-xs">(Medio día)</span>
+                            {% elif office.tipo_sabado == 'tarde' %}
+                                <span class="text-gray-500 text-xs">(Solo tarde)</span>
+                            {% endif %}
+                        {% else %}
+                            Cerrado
+                        {% endif %}
+                    {% endif %}
+                    
+                    {# Domingo #}
+                    {% if 'domingo' in dias %}
+                        <br><span class="text-gray-600">Dom:</span> 
+                        {% if office.tipo_horario == 'turnos' %}
+                            {{ office.turno_manana_inicio or '09:00' }} - {{ office.turno_tarde_fin or '14:00' }}
+                        {% else %}
+                            {{ office.hora_apertura or office.horario_apertura or '09:00' }} - {{ office.hora_cierre or office.horario_cierre or '14:00' }}
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    Lun-Vie: 09:00 - 17:00
+                {% endif %}
+            </p>
         </div>
     </div>
 
     <div class="mt-6 flex flex-wrap gap-3">
-        <a href="/servicios" class="bg-blue-700 text-white px-4 py-2 rounded">Ver servicios</a>
-        <a href="/reclamos" class="bg-gray-700 text-white px-4 py-2 rounded">Ingresar reclamo</a>
-        <a href="/verificar-documento" class="bg-green-700 text-white px-4 py-2 rounded">Verificar documento</a>
+        <a href="{{ url_for('public.services') }}" class="bg-blue-700 text-white px-4 py-2 rounded">Ver servicios</a>
+        <a href="{{ url_for('public.public_complaints') }}" class="bg-gray-700 text-white px-4 py-2 rounded">Ingresar reclamo</a>
+        <a href="{{ url_for('public.verify_document') }}" class="bg-green-700 text-white px-4 py-2 rounded">Verificar documento</a>
     </div>
 </div>
 

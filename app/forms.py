@@ -84,9 +84,16 @@ class UserForm(FlaskForm):
     cargo = StringField("Cargo")
     activo = BooleanField("Usuario Activo")
     submit = SubmitField("Guardar Usuario")
+    
     def validate_rut(self, field):
         if not validate_rut(field.data):
             raise ValidationError("RUT inválido")
+    
+    def validate_email(self, field):
+        from app.models import User
+        user = User.query.filter_by(email=field.data).first()
+        if user:
+            raise ValidationError("Este correo electrónico ya está registrado. Use otro email.")
 
 class OfficeConfigForm(FlaskForm):
     nombre_notaria = StringField("Nombre de la Notaría", validators=[DataRequired()])

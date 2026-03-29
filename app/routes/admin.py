@@ -64,6 +64,18 @@ def list_users():
 def new_user():
     form = UserForm()
     if form.validate_on_submit():
+        # Verificar si el email ya existe (doble validación)
+        existing_user = User.query.filter_by(email=form.email.data).first()
+        if existing_user:
+            flash("Error: El correo electrónico ya está registrado.", "danger")
+            return render_template("admin/user_form.html", form=form)
+        
+        # Verificar si el RUT ya existe
+        existing_rut = User.query.filter_by(rut=form.rut.data).first()
+        if existing_rut:
+            flash("Error: El RUT ya está registrado.", "danger")
+            return render_template("admin/user_form.html", form=form)
+        
         user = User(
             nombre=form.nombre.data,
             rut=form.rut.data,

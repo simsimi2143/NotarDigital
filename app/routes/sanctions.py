@@ -10,7 +10,7 @@ sanctions_bp = Blueprint("sanctions", __name__, url_prefix="/admin/sanctions")
 
 @sanctions_bp.route("/")
 @login_required
-@roles_required("admin", "notario")
+@roles_required("admin", "notario", "funcionario")   # ← Se agregó "funcionario"
 def list_sanctions():
     q = request.args.get("q", "").strip()
     page = request.args.get("page", 1, type=int)

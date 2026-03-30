@@ -1,164 +1,175 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="bg-slate-50 min-h-screen font-sans">
+<div class="bg-white min-h-screen font-sans text-slate-900">
     
-    <section class="bg-white border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 py-12 md:py-16">
+    <section class="relative bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 py-20 lg:py-32 overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute -top-24 -right-24 w-96 h-96 bg-blue-500 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-emerald-500 rounded-full blur-3xl"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                
-                <div>
-                    <span class="inline-block px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider mb-4">
-                        Notaría Digital — Araucanía
-                    </span>
-                    <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 leading-tight">
+                <div class="text-white space-y-8">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-400/30 text-blue-300 text-xs font-bold uppercase tracking-widest">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                        </span>
+                        Ministro de Fe — Araucanía, Chile
+                    </div>
+                    <h1 class="text-5xl lg:text-7xl font-serif font-bold leading-tight">
                         {{ office.nombre_notaria if office else 'Notaría Digital' }}
                     </h1>
-                    <p class="text-lg text-slate-600 mb-8 leading-relaxed">
-                        Plataforma integral de atención, consulta pública y gestión documental. Garantizamos trazabilidad y seguridad jurídica en cada trámite.
+                    <p class="text-xl text-slate-300 max-w-lg leading-relaxed">
+                        Excelencia en servicios notariales con soporte tecnológico. Garantizamos la seguridad e integridad de sus actos jurídicos.
                     </p>
                     <div class="flex flex-wrap gap-4">
-                        <a href="{{ url_for('public.verify_document') }}" class="inline-flex items-center px-6 py-3 bg-emerald-600 text-white font-bold rounded-lg shadow-sm hover:bg-emerald-700 transition-all gap-2">
+                        <a href="{{ url_for('public.verify_document') }}" class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-900/20 transition-all flex items-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             Verificar Documento
                         </a>
-                        <a href="{{ url_for('public.services') }}" class="inline-flex items-center px-6 py-3 bg-blue-900 text-white font-bold rounded-lg shadow-sm hover:bg-slate-800 transition-all">
-                            Ver Servicios
+                        <a href="#servicios" class="px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold rounded-xl border border-white/20 transition-all">
+                            Explorar Servicios
                         </a>
                     </div>
                 </div>
 
-                <div class="bg-slate-900 rounded-2xl p-8 text-white shadow-2xl relative overflow-hidden">
-                    <div class="relative z-10">
-                        <h3 class="text-xl font-bold mb-6 flex items-center gap-2 text-blue-400">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                            Información Oficial
-                        </h3>
-                        
-                        <div class="space-y-6 text-slate-300">
-                            <div>
-                                <p class="text-white font-semibold leading-tight">{{ office.direccion if office else 'Dirección no configurada' }}</p>
-                                <p class="text-sm">{{ office.comuna if office else '' }}, {{ office.region if office else '' }}</p>
-                            </div>
+                <div class="bg-white rounded-3xl p-8 shadow-2xl shadow-black/50 border border-slate-100">
+                    <h3 class="text-slate-900 text-xl font-serif font-bold mb-6 flex items-center gap-3">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                        Atención al Público
+                    </h3>
+                    
+                    <div class="space-y-6">
+                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                            <p class="text-[10px] uppercase font-bold text-slate-500 tracking-widest mb-1">Oficina Presencial</p>
+                            <p class="text-lg text-slate-950 font-medium leading-snug">{{ office.direccion if office else 'Dirección no configurada' }}</p>
+                            <p class="text-slate-600 italic text-sm">{{ office.comuna if office else '' }}, {{ office.region if office else '' }}</p>
+                        </div>
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-slate-800 pt-4">
-                                <div>
-                                    <p class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Correo</p>
-                                    <p class="text-sm text-white truncate">{{ office.correo_oficial if office else '' }}</p>
-                                </div>
-                                <div>
-                                    <p class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Teléfono</p>
-                                    <p class="text-sm text-white">{{ office.telefono if office else '' }}</p>
-                                </div>
-                            </div>
+                        <div class="bg-blue-50/50 rounded-2xl p-6 border border-blue-100">
+                            <h4 class="text-xs uppercase font-black text-blue-900 tracking-widest mb-5 flex items-center gap-2">
+                                <span class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
+                                Horario de Protocolo
+                            </h4>
+                            
+                            <div class="space-y-4">
+                                {% if office %}
+                                    {% set dias = (office.dias_atencion or 'lunes,martes,miercoles,jueves,viernes').split(',') %}
+                                    
+                                    <div class="flex justify-between items-center border-b border-blue-100 pb-2">
+                                        <div class="flex flex-col">
+                                            <span class="text-slate-700 font-medium text-sm">Horario Mañana</span>
+                                            <span class="text-[10px] text-slate-400 uppercase font-bold">Lunes a Viernes</span>
+                                        </div>
+                                        <span class="text-slate-950 font-black tracking-tight text-base">
+                                            {{ office.turno_manana_inicio or '08:45' }} - {{ office.turno_manana_fin or '13:30' }}
+                                        </span>
+                                    </div>
 
-                            <div class="bg-slate-800/40 rounded-xl p-5 border border-slate-700">
-                                <p class="text-[10px] uppercase font-bold text-blue-400 tracking-widest mb-3">Horario de Atención</p>
-                                <div class="space-y-3 text-sm">
-                                    {% if office %}
-                                        {% set dias = (office.dias_atencion or 'lunes,martes,miercoles,jueves,viernes').split(',') %}
-                                        
-                                        <div class="flex flex-col gap-1 border-b border-slate-700/50 pb-2">
-                                            <div class="flex justify-between items-center">
-                                                <span class="text-slate-400 font-medium">Lun - Vie</span>
-                                                <span class="text-white font-bold">
-                                                    {% if office.tipo_horario == 'turnos' and office.turno_manana_inicio and office.turno_tarde_fin %}
-                                                        {{ office.turno_manana_inicio }} - {{ office.turno_manana_fin }} / {{ office.turno_tarde_inicio }} - {{ office.turno_tarde_fin }}
-                                                    {% elif office.tipo_horario == 'colacion' and office.colacion_apertura and office.colacion_cierre %}
-                                                        {{ office.colacion_apertura }} - {{ office.colacion_cierre }}
-                                                    {% else %}
-                                                        {{ office.hora_apertura or '08:45' }} - {{ office.hora_cierre or '16:30' }}
-                                                    {% endif %}
-                                                </span>
-                                            </div>
-                                            {% if office.tipo_horario == 'colacion' and office.colacion_inicio and office.colacion_fin %}
-                                                <span class="text-[11px] text-slate-500 italic">(Colación: {{ office.colacion_inicio }} - {{ office.colacion_fin }})</span>
-                                            {% endif %}
+                                    <div class="flex justify-between items-center border-b border-blue-100 pb-2">
+                                        <div class="flex flex-col">
+                                            <span class="text-slate-700 font-medium text-sm">Horario Tarde</span>
+                                            <span class="text-[10px] text-slate-400 uppercase font-bold">Lunes a Viernes</span>
                                         </div>
+                                        <span class="text-slate-950 font-black tracking-tight text-base">
+                                            {{ office.turno_tarde_inicio or '14:50' }} - {{ office.turno_tarde_fin or '16:30' }}
+                                        </span>
+                                    </div>
 
-                                        {% if 'sabado' in dias %}
-                                        <div class="flex justify-between items-center py-1">
-                                            <span class="text-slate-400 font-medium">Sábados</span>
-                                            <div class="text-right">
-                                                <span class="text-white font-bold">
-                                                    {% if office.sabado_inicio and office.sabado_fin %}
-                                                        {{ office.sabado_inicio }} - {{ office.sabado_fin }}
-                                                    {% else %}
-                                                        09:30 - 14:00
-                                                    {% endif %}
-                                                </span>
-                                                <p class="text-[10px] text-blue-400 font-bold uppercase tracking-tighter">(Medio día)</p>
-                                            </div>
+                                    {% if 'sabado' in dias %}
+                                    <div class="flex justify-between items-center pt-1">
+                                        <div class="flex flex-col">
+                                            <span class="text-slate-700 font-medium text-sm">Fin de Semana</span>
+                                            <span class="text-[10px] text-slate-400 uppercase font-bold">Sábados de Turno</span>
                                         </div>
-                                        {% endif %}
-                                    {% else %}
-                                        <div class="flex justify-between items-center border-b border-slate-700/50 pb-2">
-                                            <span class="text-slate-400">Lun - Vie</span>
-                                            <span class="text-white font-bold">08:45 - 13:30 / 14:50 - 16:30</span>
-                                        </div>
-                                        <div class="flex justify-between items-center pt-2">
-                                            <span class="text-slate-400">Sábados</span>
-                                            <span class="text-white font-bold">09:30 - 14:00 <span class="text-[10px] text-blue-400 ml-1">(Medio día)</span></span>
-                                        </div>
+                                        <span class="text-slate-950 font-black tracking-tight text-base">
+                                            {{ office.sabado_inicio or '09:30' }} - {{ office.sabado_fin or '14:00' }}
+                                        </span>
+                                    </div>
                                     {% endif %}
-                                </div>
+                                {% else %}
+                                    <div class="text-slate-600 italic text-center py-2">Horarios por confirmar administrativamente.</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                                <p class="text-[10px] uppercase font-bold text-slate-400 mb-1">Email</p>
+                                <p class="text-xs text-blue-800 font-bold truncate">{{ office.correo_oficial if office else 'contacto@notaria.cl' }}</p>
+                            </div>
+                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                                <p class="text-[10px] uppercase font-bold text-slate-400 mb-1">Teléfono</p>
+                                <p class="text-xs text-slate-950 font-bold">{{ office.telefono if office else '—' }}</p>
                             </div>
                         </div>
                     </div>
-                    <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl"></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="max-w-7xl mx-auto px-4 py-12">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-                <h3 class="text-xl font-bold text-slate-900 mb-4">Consulta desde casa</h3>
-                <p class="text-slate-600 text-sm leading-relaxed">
-                    Verifique documentos y consulte copias electrónicas sin costo y sin necesidad de desplazarse.
-                </p>
+    <section id="servicios" class="max-w-7xl mx-auto px-6 py-24">
+        <div class="flex flex-col md:flex-row items-end justify-between mb-16 gap-6 border-b border-slate-100 pb-10">
+            <div class="max-w-2xl text-left">
+                <h2 class="text-4xl font-serif font-bold text-slate-950 mb-4 tracking-tight">Servicios y Aranceles</h2>
+                <p class="text-slate-600 text-lg">Listado oficial de actuaciones notariales disponibles bajo normativa vigente.</p>
             </div>
-            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-                <h3 class="text-xl font-bold text-slate-900 mb-4">Transparencia</h3>
-                <p class="text-slate-600 text-sm leading-relaxed">
-                    Acceda a tarifas oficiales, horarios actualizados y listado de sanciones publicadas de forma abierta.
-                </p>
-            </div>
-            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-                <h3 class="text-xl font-bold text-slate-900 mb-4">Gestión Digital</h3>
-                <p class="text-slate-600 text-sm leading-relaxed">
-                    Resguardo documental con trazabilidad completa y copias electrónicas verificables.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section class="max-w-7xl mx-auto px-4 py-12 mb-16">
-        <div class="flex items-center justify-between mb-8">
-            <h2 class="text-3xl font-black text-slate-900 tracking-tight">Servicios notariales</h2>
-            <a href="{{ url_for('public.public_complaints') }}" class="text-sm font-bold text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors">
-                Ingresar Reclamo
+            <a href="{{ url_for('public.public_complaints') }}" class="inline-flex items-center text-sm font-bold text-rose-800 bg-rose-50 hover:bg-rose-100 px-6 py-3 rounded-xl transition-all border border-rose-100">
+                Canal de Reclamos y Sugerencias
             </a>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for service in services %}
-            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
-                <h4 class="font-bold text-lg text-slate-900 mb-2">{{ service.nombre }}</h4>
-                <p class="text-slate-600 text-sm mb-6 flex-grow">{{ service.descripcion }}</p>
-                <div class="flex items-center justify-between pt-4 border-t border-slate-50">
-                    <span class="text-xl font-black text-blue-900">${{ service.tarifa }}</span>
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Valor Oficial</span>
+            <div class="group bg-white p-8 rounded-3xl border border-slate-200 hover:border-blue-200 hover:shadow-2xl transition-all flex flex-col h-full">
+                <h4 class="font-serif font-bold text-xl text-slate-950 mb-3 group-hover:text-blue-800 transition-colors">{{ service.nombre }}</h4>
+                <p class="text-slate-500 text-sm mb-8 flex-grow leading-relaxed italic">
+                    {{ service.descripcion or 'Consulte requisitos específicos para esta actuación notarial en mesón de atención.' }}
+                </p>
+                <div class="flex items-center justify-between pt-6 border-t border-slate-50">
+                    <div class="flex flex-col">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tarifa Legal</span>
+                        <span class="text-2xl font-black text-slate-950">${{ "{:,.0f}".format(service.tarifa|float)|replace(',', '.') }}</span>
+                    </div>
+                    <span class="px-3 py-1 bg-slate-100 text-slate-500 text-[9px] font-bold rounded-lg border border-slate-200 uppercase">Valor Referencial</span>
                 </div>
             </div>
             {% else %}
-            <div class="col-span-full py-12 text-center bg-white rounded-xl border-2 border-dashed border-slate-200">
-                <p class="text-slate-400">No hay servicios cargados actualmente.</p>
+            <div class="col-span-full py-20 text-center bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
+                <p class="text-slate-500 font-serif italic text-lg">Actualizando catálogo de servicios notariales...</p>
             </div>
             {% endfor %}
         </div>
     </section>
-
+    <section class="bg-slate-50 py-24 border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col lg:flex-row gap-16 items-center">
+                <div class="w-full lg:w-1/2">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-blue-600 rounded-3xl rotate-3 scale-95 opacity-10"></div>
+                        <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=800" alt="Notaría" class="rounded-3xl shadow-xl relative z-10 grayscale hover:grayscale-0 transition-all duration-700">
+                    </div>
+                </div>
+                <div class="w-full lg:w-1/2 space-y-6">
+                    <h2 class="text-4xl font-serif font-bold text-slate-950 leading-tight">Compromiso con la Fe Pública</h2>
+                    <p class="text-slate-600 text-lg leading-relaxed">
+                        Como ministros de fe en la región de la **Araucanía**, nuestra misión es facilitar la vida de los ciudadanos mediante procesos transparentes y el uso de firmas electrónicas avanzadas.
+                    </p>
+                    <ul class="space-y-4">
+                        {% for item in ['Seguridad en Datos Personales', 'Atención Preferencial', 'Aranceles Transparentes'] %}
+                        <li class="flex items-center gap-3 font-bold text-slate-800">
+                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            {{ item }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 {% endblock %}

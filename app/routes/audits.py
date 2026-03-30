@@ -3,11 +3,13 @@ from io import StringIO
 from flask import Blueprint, render_template, request, make_response
 from flask_login import login_required
 from app.models import AuditLog, User
+from app.decorators import roles_required
 
 audits_bp = Blueprint("audits", __name__, url_prefix="/admin/audits")
 
 @audits_bp.route("/")
 @login_required
+@roles_required("admin", "notario")
 def list_audits():
     modulo = request.args.get("modulo", "").strip()
     accion = request.args.get("accion", "").strip()
@@ -36,6 +38,7 @@ def list_audits():
 
 @audits_bp.route("/export")
 @login_required
+@roles_required("admin", "notario")
 def export_audits():
     logs = AuditLog.query.order_by(AuditLog.fecha.desc()).all()
     users = {u.id: u for u in User.query.all()}

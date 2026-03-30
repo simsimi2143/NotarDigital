@@ -14,8 +14,8 @@ admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
 @admin_bp.route("/")
 @login_required
-@roles_required("admin", "notario")
 def dashboard():
+    # Los funcionarios también pueden ver el panel, pero con restricciones visuales
     stats = {
         "total_docs": Document.query.count(),
         "docs_firmados": Document.query.filter_by(estado="firmado").count(),
@@ -33,8 +33,8 @@ def dashboard():
     complaints_labels = [item[0] for item in complaints_by_status]
     complaints_values = [item[1] for item in complaints_by_status]
 
-    recent_logs = AuditLog.query.order_by(AuditLog.fecha.desc()).limit(8).all()
-    users = {u.id: u for u in User.query.all()}
+    recent_logs = AuditLog.query.order_by(AuditLog.fecha.desc()).limit(8).all() if current_user.rol in ['admin', 'notario'] else []
+    users = {u.id: u for u in User.query.all()} if current_user.rol in ['admin', 'notario'] else {}
 
     return render_template(
         "admin/dashboard.html",

@@ -9,6 +9,7 @@
             <h1 class="text-3xl font-serif font-bold text-slate-800">Control de Sanciones</h1>
             <p class="text-slate-500 text-sm mt-1">Registro oficial de medidas disciplinarias y resoluciones del personal.</p>
         </div>
+        {% if current_user.rol in ['admin', 'notario'] %}
         <a href="{{ url_for('sanctions.new_sanction') }}" 
            class="mt-4 md:mt-0 inline-flex items-center bg-slate-800 hover:bg-slate-700 text-white font-medium py-2.5 px-5 rounded-lg transition duration-200 shadow-sm">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -16,6 +17,7 @@
             </svg>
             Registrar Nueva Sanción
         </a>
+        {% endif %}
     </div>
 
     <div class="mb-6">
@@ -65,12 +67,14 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                         <div class="flex justify-center items-center space-x-4">
+                            {% if current_user.rol in ['admin', 'notario'] %}
                             <a href="{{ url_for('sanctions.edit_sanction', id=s.id) }}" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1 rounded-md transition">Editar</a>
                             <form action="{{ url_for('sanctions.toggle_sanction', id=s.id) }}" method="POST" class="inline">
                                 <button type="submit" class="{% if s.publica %}text-rose-600 hover:text-rose-800 bg-rose-50{% else %}text-emerald-600 hover:text-emerald-800 bg-emerald-50{% endif %} px-3 py-1 rounded-md transition">
                                     {% if s.publica %}Despublicar{% else %}Publicar{% endif %}
                                 </button>
                             </form>
+                            {% endif %}
                         </div>
                     </td>
                 </tr>

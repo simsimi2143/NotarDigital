@@ -1,10 +1,12 @@
-from app import create_app
 from app.extensions import db
 from app.models import User, OfficeConfig
 
-app = create_app()
-
-with app.app_context():
+def seed_data():
+    """
+    Crea el usuario administrador y la configuración inicial 
+    si no existen en la base de datos.
+    """
+    # Verificación y creación del Administrador
     if not User.query.filter_by(email="admin@notaria.cl").first():
         user = User(
             nombre="Administrador",
@@ -15,7 +17,9 @@ with app.app_context():
         )
         user.set_password("123456")
         db.session.add(user)
+        print("✅ Usuario admin@notaria.cl creado.")
 
+    # Verificación y creación de la configuración de la oficina
     if not OfficeConfig.query.first():
         office = OfficeConfig(
             nombre_notaria="Notaría Demo Araucanía",
@@ -29,6 +33,7 @@ with app.app_context():
             horas_minimas_atencion=7
         )
         db.session.add(office)
+        print("✅ Configuración de oficina inicial creada.")
 
     db.session.commit()
-    print("Datos iniciales creados")
+    print("🚀 Proceso de seed finalizado con éxito.")

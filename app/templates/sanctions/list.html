@@ -5,24 +5,24 @@
     <a href="{{ url_for('sanctions.new_sanction') }}" class="bg-blue-700 text-white px-4 py-2 rounded">Nueva sanción</a>
 </div>
 
-<form method="GET" class="mb-4">
-    <input type="text" name="q" value="{{ q }}" placeholder="Buscar por funcionario" class="border rounded p-2">
+<form method="GET" class="mb-4 flex gap-2">
+    <input type="text" name="q" value="{{ q }}" placeholder="Buscar por funcionario..." class="border rounded p-2 w-64">
     <button class="bg-gray-700 text-white px-4 py-2 rounded">Buscar</button>
 </form>
 
 <div class="bg-white shadow rounded overflow-hidden">
-    <table class="w-full">
+    <table class="w-full text-left">
         <thead class="bg-gray-50 border-b">
             <tr>
-                <th class="p-3 text-left">Funcionario</th>
-                <th class="p-3 text-left">Fecha</th>
-                <th class="p-3 text-left">Publicada</th>
+                <th class="p-3">Funcionario</th>
+                <th class="p-3">Fecha</th>
+                <th class="p-3">Publicada</th>
                 <th class="p-3 text-center">Acciones</th>
             </tr>
         </thead>
         <tbody>
             {% for s in sanctions %}
-            <tr class="border-b">
+            <tr class="border-b hover:bg-gray-50">
                 <td class="p-3">{{ users[s.funcionario_id].nombre if users.get(s.funcionario_id) else 'N/D' }}</td>
                 <td class="p-3">{{ s.fecha_sancion.strftime('%d-%m-%Y') }}</td>
                 <td class="p-3">
@@ -32,30 +32,35 @@
                         <span class="text-red-600 font-semibold">No</span>
                     {% endif %}
                 </td>
-                <td class="p-3 text-center space-x-2">
+                <td class="p-3 text-center space-x-4">
                     <a href="{{ url_for('sanctions.edit_sanction', id=s.id) }}" class="text-blue-700 hover:underline">Editar</a>
                     <form action="{{ url_for('sanctions.toggle_sanction', id=s.id) }}" method="POST" class="inline">
-                        <button class="text-purple-700 hover:underline">
+                        <button type="submit" class="text-purple-700 hover:underline">
                             {% if s.publica %}Despublicar{% else %}Publicar{% endif %}
                         </button>
                     </form>
                 </td>
             </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" class="p-8 text-center text-gray-500">No hay sanciones registradas.</td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
-    <div class="mt-6 flex justify-center gap-2">
+    
+    {% if pagination.pages > 1 %}
+    <div class="p-4 flex justify-center gap-2 border-t bg-gray-50">
         {% if pagination.has_prev %}
-            <a href="{{ url_for('sanctions.list_sanctions', page=pagination.prev_num, q=q) }}" class="px-3 py-1 bg-gray-300 rounded">Anterior</a>
+            <a href="{{ url_for('sanctions.list_sanctions', page=pagination.prev_num, q=q) }}" class="px-3 py-1 bg-white border rounded hover:bg-gray-100">Anterior</a>
         {% endif %}
         
-        <span class="px-3 py-1 bg-white rounded shadow">
-            Página {{ pagination.page }} de {{ pagination.pages or 1 }}
-        </span>
+        <span class="px-3 py-1 font-medium">Página {{ pagination.page }} de {{ pagination.pages }}</span>
     
         {% if pagination.has_next %}
-            <a href="{{ url_for('sanctions.list_sanctions', page=pagination.next_num, q=q) }}" class="px-3 py-1 bg-gray-300 rounded">Siguiente</a>
+            <a href="{{ url_for('sanctions.list_sanctions', page=pagination.next_num, q=q) }}" class="px-3 py-1 bg-white border rounded hover:bg-gray-100">Siguiente</a>
         {% endif %}
     </div>
+    {% endif %}
 </div>
 {% endblock %}

@@ -51,7 +51,8 @@ def new_sanction():
         flash("Sanción registrada correctamente", "success")
         return redirect(url_for("sanctions.list_sanctions"))
 
-    return render_template("sanctions/form.html", form=form)
+    # Se agrega sanction=None para que el template sepa que es una creación
+    return render_template("sanctions/form.html", form=form, sanction=None)
 
 @sanctions_bp.route("/<int:id>/edit", methods=["GET", "POST"])
 @login_required
@@ -76,7 +77,8 @@ def edit_sanction(id):
         flash("Sanción actualizada", "success")
         return redirect(url_for("sanctions.list_sanctions"))
 
-    return render_template("sanctions/form.html", form=form)
+    # Crucial: se pasa el objeto sanction para que el form sepa que es edición
+    return render_template("sanctions/form.html", form=form, sanction=sanction)
 
 @sanctions_bp.route("/<int:id>/toggle", methods=["POST"])
 @login_required

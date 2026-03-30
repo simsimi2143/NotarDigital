@@ -16,8 +16,9 @@ def home():
 
 @public_bp.route("/servicios")
 def services():
-    services = Service.query.filter_by(activo=True).all()
-    return render_template("public/services.html", services=services)
+    # Obtenemos todos los servicios activos de una vez
+    services_list = Service.query.filter_by(activo=True).all()
+    return render_template("public/services.html", services=services_list)
 
 @public_bp.route("/sanciones")
 def public_sanctions():

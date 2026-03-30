@@ -43,8 +43,9 @@
             {{ form.publica.label(class="font-semibold") }}
         </div>
 
-        <div>
-            {{ form.submit(class="bg-blue-700 text-white px-6 py-3 rounded") }}
+        <div class="flex gap-4">
+            {{ form.submit(class="bg-blue-700 text-white px-6 py-3 rounded cursor-pointer") }}
+            <a href="{{ url_for('sanctions.list_sanctions') }}" class="bg-gray-500 text-white px-6 py-3 rounded">Cancelar</a>
         </div>
     </form>
 </div>

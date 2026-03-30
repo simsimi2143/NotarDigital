@@ -1,103 +1,164 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<div class="bg-white rounded shadow p-8 mb-8">
-    <h1 class="text-4xl font-bold text-blue-900 mb-4">
-        {{ office.nombre_notaria if office else 'Notaría Digital' }}
-    </h1>
-    <p class="text-lg text-gray-700 mb-2">
-        Plataforma digital de atención, consulta pública y gestión documental.
-    </p>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 text-sm">
-        <div>
-            <p><strong>Dirección:</strong> {{ office.direccion if office else '' }}</p>
-            <p><strong>Comuna:</strong> {{ office.comuna if office else '' }}</p>
-            <p><strong>Región:</strong> {{ office.region if office else '' }}</p>
+<div class="bg-slate-50 min-h-screen font-sans">
+    
+    <section class="bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 py-12 md:py-16">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <div>
+                    <span class="inline-block px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider mb-4">
+                        Notaría Digital — Araucanía
+                    </span>
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 leading-tight">
+                        {{ office.nombre_notaria if office else 'Notaría Digital' }}
+                    </h1>
+                    <p class="text-lg text-slate-600 mb-8 leading-relaxed">
+                        Plataforma integral de atención, consulta pública y gestión documental. Garantizamos trazabilidad y seguridad jurídica en cada trámite.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="{{ url_for('public.verify_document') }}" class="inline-flex items-center px-6 py-3 bg-emerald-600 text-white font-bold rounded-lg shadow-sm hover:bg-emerald-700 transition-all gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Verificar Documento
+                        </a>
+                        <a href="{{ url_for('public.services') }}" class="inline-flex items-center px-6 py-3 bg-blue-900 text-white font-bold rounded-lg shadow-sm hover:bg-slate-800 transition-all">
+                            Ver Servicios
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-2xl p-8 text-white shadow-2xl relative overflow-hidden">
+                    <div class="relative z-10">
+                        <h3 class="text-xl font-bold mb-6 flex items-center gap-2 text-blue-400">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            Información Oficial
+                        </h3>
+                        
+                        <div class="space-y-6 text-slate-300">
+                            <div>
+                                <p class="text-white font-semibold leading-tight">{{ office.direccion if office else 'Dirección no configurada' }}</p>
+                                <p class="text-sm">{{ office.comuna if office else '' }}, {{ office.region if office else '' }}</p>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-slate-800 pt-4">
+                                <div>
+                                    <p class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Correo</p>
+                                    <p class="text-sm text-white truncate">{{ office.correo_oficial if office else '' }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Teléfono</p>
+                                    <p class="text-sm text-white">{{ office.telefono if office else '' }}</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-800/40 rounded-xl p-5 border border-slate-700">
+                                <p class="text-[10px] uppercase font-bold text-blue-400 tracking-widest mb-3">Horario de Atención</p>
+                                <div class="space-y-3 text-sm">
+                                    {% if office %}
+                                        {% set dias = (office.dias_atencion or 'lunes,martes,miercoles,jueves,viernes').split(',') %}
+                                        
+                                        <div class="flex flex-col gap-1 border-b border-slate-700/50 pb-2">
+                                            <div class="flex justify-between items-center">
+                                                <span class="text-slate-400 font-medium">Lun - Vie</span>
+                                                <span class="text-white font-bold">
+                                                    {% if office.tipo_horario == 'turnos' and office.turno_manana_inicio and office.turno_tarde_fin %}
+                                                        {{ office.turno_manana_inicio }} - {{ office.turno_manana_fin }} / {{ office.turno_tarde_inicio }} - {{ office.turno_tarde_fin }}
+                                                    {% elif office.tipo_horario == 'colacion' and office.colacion_apertura and office.colacion_cierre %}
+                                                        {{ office.colacion_apertura }} - {{ office.colacion_cierre }}
+                                                    {% else %}
+                                                        {{ office.hora_apertura or '08:45' }} - {{ office.hora_cierre or '16:30' }}
+                                                    {% endif %}
+                                                </span>
+                                            </div>
+                                            {% if office.tipo_horario == 'colacion' and office.colacion_inicio and office.colacion_fin %}
+                                                <span class="text-[11px] text-slate-500 italic">(Colación: {{ office.colacion_inicio }} - {{ office.colacion_fin }})</span>
+                                            {% endif %}
+                                        </div>
+
+                                        {% if 'sabado' in dias %}
+                                        <div class="flex justify-between items-center py-1">
+                                            <span class="text-slate-400 font-medium">Sábados</span>
+                                            <div class="text-right">
+                                                <span class="text-white font-bold">
+                                                    {% if office.sabado_inicio and office.sabado_fin %}
+                                                        {{ office.sabado_inicio }} - {{ office.sabado_fin }}
+                                                    {% else %}
+                                                        09:30 - 14:00
+                                                    {% endif %}
+                                                </span>
+                                                <p class="text-[10px] text-blue-400 font-bold uppercase tracking-tighter">(Medio día)</p>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    {% else %}
+                                        <div class="flex justify-between items-center border-b border-slate-700/50 pb-2">
+                                            <span class="text-slate-400">Lun - Vie</span>
+                                            <span class="text-white font-bold">08:45 - 13:30 / 14:50 - 16:30</span>
+                                        </div>
+                                        <div class="flex justify-between items-center pt-2">
+                                            <span class="text-slate-400">Sábados</span>
+                                            <span class="text-white font-bold">09:30 - 14:00 <span class="text-[10px] text-blue-400 ml-1">(Medio día)</span></span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl"></div>
+                </div>
+            </div>
         </div>
-        <div>
-            <p><strong>Correo oficial:</strong> {{ office.correo_oficial if office else '' }}</p>
-            <p><strong>Teléfono:</strong> {{ office.telefono if office else '' }}</p>
-            <p>
-                <strong>Horario:</strong> 
-                {% if office %}
-                    {% set dias = (office.dias_atencion or 'lunes,martes,miercoles,jueves,viernes').split(',') %}
-                    
-                    {# Horario entre semana #}
-                    {% if office.tipo_horario == 'turnos' and office.turno_manana_inicio and office.turno_tarde_fin %}
-                        Lun-Vie: {{ office.turno_manana_inicio }} - {{ office.turno_manana_fin }} / {{ office.turno_tarde_inicio }} - {{ office.turno_tarde_fin }}
-                    {% elif office.tipo_horario == 'colacion' and office.colacion_apertura and office.colacion_cierre %}
-                        Lun-Vie: {{ office.colacion_apertura }} - {{ office.colacion_cierre }}
-                        {% if office.colacion_inicio and office.colacion_fin %}
-                            <span class="text-gray-500">(Colación: {{ office.colacion_inicio }} - {{ office.colacion_fin }})</span>
-                        {% endif %}
-                    {% else %}
-                        Lun-Vie: {{ office.hora_apertura or office.horario_apertura or '09:00' }} - {{ office.hora_cierre or office.horario_cierre or '17:00' }}
-                    {% endif %}
-                    
-                    {# Horario sábados #}
-                    {% if 'sabado' in dias %}
-                        <br><span class="text-gray-600">Sáb:</span> 
-                        {% if office.sabado_inicio and office.sabado_fin %}
-                            {{ office.sabado_inicio }} - {{ office.sabado_fin }}
-                            {% if office.tipo_sabado == 'medio' %}
-                                <span class="text-gray-500 text-xs">(Medio día)</span>
-                            {% elif office.tipo_sabado == 'tarde' %}
-                                <span class="text-gray-500 text-xs">(Solo tarde)</span>
-                            {% endif %}
-                        {% else %}
-                            Cerrado
-                        {% endif %}
-                    {% endif %}
-                    
-                    {# Domingo #}
-                    {% if 'domingo' in dias %}
-                        <br><span class="text-gray-600">Dom:</span> 
-                        {% if office.tipo_horario == 'turnos' %}
-                            {{ office.turno_manana_inicio or '09:00' }} - {{ office.turno_tarde_fin or '14:00' }}
-                        {% else %}
-                            {{ office.hora_apertura or office.horario_apertura or '09:00' }} - {{ office.hora_cierre or office.horario_cierre or '14:00' }}
-                        {% endif %}
-                    {% endif %}
-                {% else %}
-                    Lun-Vie: 09:00 - 17:00
-                {% endif %}
-            </p>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-4 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                <h3 class="text-xl font-bold text-slate-900 mb-4">Consulta desde casa</h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Verifique documentos y consulte copias electrónicas sin costo y sin necesidad de desplazarse.
+                </p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                <h3 class="text-xl font-bold text-slate-900 mb-4">Transparencia</h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Acceda a tarifas oficiales, horarios actualizados y listado de sanciones publicadas de forma abierta.
+                </p>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                <h3 class="text-xl font-bold text-slate-900 mb-4">Gestión Digital</h3>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Resguardo documental con trazabilidad completa y copias electrónicas verificables.
+                </p>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <div class="mt-6 flex flex-wrap gap-3">
-        <a href="{{ url_for('public.services') }}" class="bg-blue-700 text-white px-4 py-2 rounded">Ver servicios</a>
-        <a href="{{ url_for('public.public_complaints') }}" class="bg-gray-700 text-white px-4 py-2 rounded">Ingresar reclamo</a>
-        <a href="{{ url_for('public.verify_document') }}" class="bg-green-700 text-white px-4 py-2 rounded">Verificar documento</a>
-    </div>
-</div>
+    <section class="max-w-7xl mx-auto px-4 py-12 mb-16">
+        <div class="flex items-center justify-between mb-8">
+            <h2 class="text-3xl font-black text-slate-900 tracking-tight">Servicios notariales</h2>
+            <a href="{{ url_for('public.public_complaints') }}" class="text-sm font-bold text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors">
+                Ingresar Reclamo
+            </a>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for service in services %}
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col">
+                <h4 class="font-bold text-lg text-slate-900 mb-2">{{ service.nombre }}</h4>
+                <p class="text-slate-600 text-sm mb-6 flex-grow">{{ service.descripcion }}</p>
+                <div class="flex items-center justify-between pt-4 border-t border-slate-50">
+                    <span class="text-xl font-black text-blue-900">${{ service.tarifa }}</span>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Valor Oficial</span>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-span-full py-12 text-center bg-white rounded-xl border-2 border-dashed border-slate-200">
+                <p class="text-slate-400">No hay servicios cargados actualmente.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-    <div class="bg-white p-6 rounded shadow">
-        <h2 class="text-xl font-bold mb-2">Consulta desde casa</h2>
-        <p class="text-gray-700">Verifique documentos, consulte copias electrónicas y acceda a información pública sin costo.</p>
-    </div>
-    <div class="bg-white p-6 rounded shadow">
-        <h2 class="text-xl font-bold mb-2">Transparencia</h2>
-        <p class="text-gray-700">Acceda a servicios, tarifas, horarios, correo oficial y listado de sanciones publicadas.</p>
-    </div>
-    <div class="bg-white p-6 rounded shadow">
-        <h2 class="text-xl font-bold mb-2">Gestión digital</h2>
-        <p class="text-gray-700">Resguardo documental, trazabilidad, reclamos y copias electrónicas verificables.</p>
-    </div>
-</div>
-
-<h2 class="text-2xl font-bold mb-4">Servicios disponibles</h2>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    {% for service in services %}
-    <div class="bg-white p-4 rounded shadow">
-        <h3 class="font-bold text-lg">{{ service.nombre }}</h3>
-        <p class="text-gray-700">{{ service.descripcion }}</p>
-        <p class="mt-2 text-blue-700 font-bold">${{ service.tarifa }}</p>
-    </div>
-    {% else %}
-    <div class="bg-white p-4 rounded shadow">
-        <p>No hay servicios cargados aún.</p>
-    </div>
-    {% endfor %}
 </div>
 {% endblock %}

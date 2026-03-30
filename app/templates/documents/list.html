@@ -1,61 +1,138 @@
 {% extends 'base.html' %}
+
+{% block title %}Gestión de Documentos | Notaría{% endblock %}
+
 {% block content %}
-<div class="flex justify-between items-center mb-4">
-    <h1 class="text-2xl font-bold">Documentos</h1>
-    <a href="{{ url_for('documents.new_document') }}" class="bg-blue-700 text-white px-4 py-2 rounded">Nuevo documento</a>
-</div>
+<div class="container mx-auto p-8 max-w-6xl">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-gray-200 pb-6">
+        <div>
+            <h1 class="text-3xl font-serif font-bold text-slate-800">Repositorio de Documentos</h1>
+            <p class="text-slate-500 text-sm mt-1">Archivo oficial de escrituras, actas y documentos notariales.</p>
+        </div>
+        <a href="{{ url_for('documents.new_document') }}" 
+           class="mt-4 md:mt-0 inline-flex items-center bg-slate-800 hover:bg-slate-700 text-white font-medium py-2.5 px-5 rounded-lg transition duration-200 shadow-sm">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Nuevo Documento
+        </a>
+    </div>
 
-<form method="GET" class="mb-4 flex flex-wrap gap-2">
-    <input type="text" name="folio" value="{{ folio }}" placeholder="Buscar por folio" class="border rounded p-2">
-    <select name="estado" class="border rounded p-2">
-        <option value="">Todos los estados</option>
-        <option value="borrador" {% if estado == 'borrador' %}selected{% endif %}>Borrador</option>
-        <option value="en_revision" {% if estado == 'en_revision' %}selected{% endif %}>En revisión</option>
-        <option value="pendiente_firma_externa" {% if estado == 'pendiente_firma_externa' %}selected{% endif %}>Pendiente firma</option>
-        <option value="firmado" {% if estado == 'firmado' %}selected{% endif %}>Firmado</option>
-        <option value="publicado" {% if estado == 'publicado' %}selected{% endif %}>Publicado</option>
-        <option value="archivado" {% if estado == 'archivado' %}selected{% endif %}>Archivado</option>
-    </select>
-    <button class="bg-gray-700 text-white px-4 py-2 rounded">Filtrar</button>
-</form>
+    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-8">
+        <form method="GET" class="flex flex-wrap gap-4 items-end">
+            <div class="flex-1 min-w-[200px]">
+                <label class="block text-xs font-semibold text-slate-500 uppercase mb-1 ml-1">N° de Folio</label>
+                <input type="text" name="folio" value="{{ folio }}" placeholder="Ej: 2026-X" 
+                       class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-slate-500 outline-none transition">
+            </div>
+            
+            <div class="flex-1 min-w-[200px]">
+                <label class="block text-xs font-semibold text-slate-500 uppercase mb-1 ml-1">Estado Jurídico</label>
+                <select name="estado" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-slate-500 outline-none transition appearance-none bg-white">
+                    <option value="">Todos los registros</option>
+                    <option value="borrador" {% if estado == 'borrador' %}selected{% endif %}>Borrador</option>
+                    <option value="en_revision" {% if estado == 'en_revision' %}selected{% endif %}>En revisión</option>
+                    <option value="pendiente_firma_externa" {% if estado == 'pendiente_firma_externa' %}selected{% endif %}>Pendiente firma</option>
+                    <option value="firmado" {% if estado == 'firmado' %}selected{% endif %}>Firmado</option>
+                    <option value="publicado" {% if estado == 'publicado' %}selected{% endif %}>Publicado</option>
+                    <option value="archivado" {% if estado == 'archivado' %}selected{% endif %}>Archivado</option>
+                </select>
+            </div>
 
-<table class="w-full bg-white shadow rounded">
-    <tr class="border-b">
-        <th class="p-2 text-left">Folio</th>
-        <th class="p-2 text-left">Título</th>
-        <th class="p-2 text-left">Estado</th>
-        <th class="p-2 text-left">Fecha</th>
-        <th class="p-2">Acciones</th>
-    </tr>
-    {% for doc in docs %}
-    <tr class="border-b">
-        <td class="p-2">{{ doc.folio }}</td>
-        <td class="p-2">{{ doc.titulo }}</td>
-        <td class="p-2">{{ doc.estado }}</td>
-        <td class="p-2">{{ doc.fecha_creacion.strftime('%d-%m-%Y') }}</td>
-        <td class="p-2 space-x-2">
-            <a href="{{ url_for('documents.document_detail', id=doc.id) }}" class="text-blue-700">Ver</a>
-            {% if doc.estado != 'firmado' %}
-            <a href="{{ url_for('documents.edit_document', id=doc.id) }}" class="text-purple-700">Editar</a>
-            {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+            <button type="submit" class="bg-slate-700 hover:bg-slate-900 text-white px-6 py-2 rounded-lg font-medium transition duration-200 flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293L3.293 7.293A1 1 0 013 6.586V4z"></path>
+                </svg>
+                Filtrar Resultados
+            </button>
+        </form>
+    </div>
 
-<div class="mt-6 flex justify-center gap-2">
-    {% if pagination.has_prev %}
-        <a href="{{ url_for('documents.list_documents', page=pagination.prev_num, estado=estado, folio=folio) }}"
-           class="px-3 py-1 bg-gray-300 rounded">Anterior</a>
-    {% endif %}
+    <div class="bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden">
+        <table class="min-w-full divide-y divide-slate-200">
+            <thead class="bg-slate-50 border-b border-slate-200">
+                <tr>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Folio</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Título del Documento</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Estado</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Fecha Creación</th>
+                    <th class="px-6 py-4 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 bg-white">
+                {% for doc in docs %}
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap font-mono text-sm text-slate-500">
+                        {{ doc.folio }}
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-sm font-semibold text-slate-800">{{ doc.titulo }}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        {% set color = {
+                            'borrador': 'bg-gray-100 text-gray-700',
+                            'en_revision': 'bg-amber-100 text-amber-800',
+                            'pendiente_firma_externa': 'bg-blue-100 text-blue-800',
+                            'firmado': 'bg-emerald-100 text-emerald-800',
+                            'publicado': 'bg-indigo-100 text-indigo-800',
+                            'archivado': 'bg-slate-200 text-slate-600'
+                        } %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ color.get(doc.estado, 'bg-slate-100 text-slate-800') }}">
+                            {{ doc.estado|replace('_', ' ')|capitalize }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                        {{ doc.fecha_creacion.strftime('%d-%m-%Y') }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                        <div class="flex justify-center items-center space-x-3">
+                            <a href="{{ url_for('documents.document_detail', id=doc.id) }}" 
+                               class="text-slate-600 hover:text-slate-900 flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                                Ver
+                            </a>
+                            {% if doc.estado != 'firmado' %}
+                            <a href="{{ url_for('documents.edit_document', id=doc.id) }}" 
+                               class="text-indigo-600 hover:text-indigo-800 font-medium">
+                                Editar
+                            </a>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="px-6 py-12 text-center text-slate-400 italic">
+                        No se encontraron registros en el archivo documental.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <span class="px-3 py-1 bg-white rounded shadow">
-        Página {{ pagination.page }} de {{ pagination.pages or 1 }}
-    </span>
+        <div class="bg-slate-50 px-6 py-4 border-t border-slate-200 flex items-center justify-between">
+            <div class="text-sm text-slate-500">
+                Página <span class="font-semibold text-slate-700">{{ pagination.page }}</span> de <span class="font-semibold text-slate-700">{{ pagination.pages or 1 }}</span>
+            </div>
+            <div class="inline-flex shadow-sm rounded-lg overflow-hidden">
+                {% if pagination.has_prev %}
+                <a href="{{ url_for('documents.list_documents', page=pagination.prev_num, estado=estado, folio=folio) }}" 
+                   class="px-4 py-2 text-sm font-medium text-slate-700 bg-white border-y border-l border-slate-300 hover:bg-slate-50 transition">
+                    Anterior
+                </a>
+                {% endif %}
 
-    {% if pagination.has_next %}
-        <a href="{{ url_for('documents.list_documents', page=pagination.next_num, estado=estado, folio=folio) }}"
-           class="px-3 py-1 bg-gray-300 rounded">Siguiente</a>
-    {% endif %}
+                {% if pagination.has_next %}
+                <a href="{{ url_for('documents.list_documents', page=pagination.next_num, estado=estado, folio=folio) }}" 
+                   class="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition">
+                    Siguiente
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

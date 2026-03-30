@@ -1,59 +1,99 @@
 {% extends 'base.html' %}
+
+{% block title %}Gestión de Reclamos | Notaría{% endblock %}
+
 {% block content %}
-<h1 class="text-2xl font-bold mb-4">Reclamos</h1>
+<div class="container mx-auto p-8 max-w-6xl">
+    <div class="mb-8 border-b border-gray-200 pb-6">
+        <h1 class="text-3xl font-serif font-bold text-slate-800">Libro de Reclamos Digital</h1>
+        <p class="text-slate-500 text-sm mt-1">Monitoreo y resolución de solicitudes y quejas ingresadas.</p>
+    </div>
 
-<form method="GET" class="mb-4 flex gap-2">
-    <select name="estado" class="border rounded p-2">
-        <option value="">Todos</option>
-        <option value="recibido" {% if estado == 'recibido' %}selected{% endif %}>Recibido</option>
-        <option value="en_revision" {% if estado == 'en_revision' %}selected{% endif %}>En revisión</option>
-        <option value="respondido" {% if estado == 'respondido' %}selected{% endif %}>Respondido</option>
-        <option value="cerrado" {% if estado == 'cerrado' %}selected{% endif %}>Cerrado</option>
-        <option value="rechazado" {% if estado == 'rechazado' %}selected{% endif %}>Rechazado</option>
-    </select>
-    <button class="bg-gray-700 text-white px-4 py-2 rounded">Filtrar</button>
-</form>
+    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-8">
+        <form method="GET" class="flex flex-wrap gap-4 items-end">
+            <div class="flex-1 min-w-[250px]">
+                <label class="block text-xs font-semibold text-slate-500 uppercase mb-1 ml-1">Filtrar por Estado</label>
+                <select name="estado" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-500 focus:border-slate-500 outline-none transition bg-white">
+                    <option value="">Todos los registros</option>
+                    <option value="recibido" {% if estado == 'recibido' %}selected{% endif %}>📥 Recibido</option>
+                    <option value="en_revision" {% if estado == 'en_revision' %}selected{% endif %}>🔍 En revisión</option>
+                    <option value="respondido" {% if estado == 'respondido' %}selected{% endif %}>✉️ Respondido</option>
+                    <option value="cerrado" {% if estado == 'cerrado' %}selected{% endif %}>✅ Cerrado</option>
+                    <option value="rechazado" {% if estado == 'rechazado' %}selected{% endif %}>🚫 Rechazado</option>
+                </select>
+            </div>
+            <button class="bg-slate-800 hover:bg-slate-700 text-white px-6 py-2 rounded-lg font-medium transition duration-200 shadow-sm flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293L3.293 7.293A1 1 0 013 6.586V4z"></path>
+                </svg>
+                Actualizar Vista
+            </button>
+        </form>
+    </div>
 
-<div class="bg-white shadow rounded overflow-hidden">
-    <table class="w-full">
-        <thead class="bg-gray-50 border-b">
-            <tr>
-                <th class="p-3 text-left">Folio</th>
-                <th class="p-3 text-left">Reclamante</th>
-                <th class="p-3 text-left">Estado</th>
-                <th class="p-3 text-left">Fecha</th>
-                <th class="p-3 text-center">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for complaint in complaints %}
-            <tr class="border-b">
-                <td class="p-3">{{ complaint.folio }}</td>
-                <td class="p-3">{{ complaint.nombre_reclamante }}</td>
-                <td class="p-3">{{ complaint.estado }}</td>
-                <td class="p-3">{{ complaint.fecha_creacion.strftime('%d-%m-%Y %H:%M') }}</td>
-                <td class="p-3 text-center">
-                    <a href="{{ url_for('complaints.complaint_detail', id=complaint.id) }}" class="text-blue-700 hover:underline">Ver</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+    <div class="bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden">
+        <table class="min-w-full divide-y divide-slate-200">
+            <thead class="bg-slate-50">
+                <tr>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Folio</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Reclamante</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Estado</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Fecha Ingreso</th>
+                    <th class="px-6 py-4 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider">Gestión</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 bg-white">
+                {% for complaint in complaints %}
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap font-mono text-sm font-bold text-slate-600">
+                        {{ complaint.folio }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-800">
+                        {{ complaint.nombre_reclamante }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        {% set badge = {
+                            'recibido': 'bg-blue-50 text-blue-700 border-blue-100',
+                            'en_revision': 'bg-amber-50 text-amber-700 border-amber-100',
+                            'respondido': 'bg-indigo-50 text-indigo-700 border-indigo-100',
+                            'cerrado': 'bg-emerald-50 text-emerald-700 border-emerald-100',
+                            'rechazado': 'bg-rose-50 text-rose-700 border-rose-100'
+                        } %}
+                        <span class="px-3 py-1 rounded-full text-xs font-medium border {{ badge.get(complaint.estado, 'bg-slate-50 text-slate-700') }}">
+                            {{ complaint.estado|replace('_', ' ')|capitalize }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
+                        {{ complaint.fecha_creacion.strftime('%d-%m-%Y %H:%M') }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <a href="{{ url_for('complaints.complaint_detail', id=complaint.id) }}" 
+                           class="inline-flex items-center text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-4 py-1.5 rounded-md text-sm font-medium transition">
+                            Revisar
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="px-6 py-12 text-center text-slate-400 italic">
+                        No hay reclamos registrados con los criterios seleccionados.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-<div class="mt-6 flex justify-center gap-2">
-    {% if pagination.has_prev %}
-        <a href="{{ url_for('complaints.list_complaints', page=pagination.prev_num, estado=estado) }}"
-           class="px-3 py-1 bg-gray-300 rounded">Anterior</a>
-    {% endif %}
-
-    <span class="px-3 py-1 bg-white rounded shadow">
-        Página {{ pagination.page }} de {{ pagination.pages or 1 }}
-    </span>
-
-    {% if pagination.has_next %}
-        <a href="{{ url_for('complaints.list_complaints', page=pagination.next_num, estado=estado) }}"
-           class="px-3 py-1 bg-gray-300 rounded">Siguiente</a>
-    {% endif %}
+        <div class="bg-slate-50 px-6 py-4 border-t border-slate-200 flex items-center justify-between">
+            <span class="text-sm text-slate-500">Página {{ pagination.page }} de {{ pagination.pages or 1 }}</span>
+            <div class="flex space-x-2">
+                {% if pagination.has_prev %}
+                <a href="{{ url_for('complaints.list_complaints', page=pagination.prev_num, estado=estado) }}" class="px-4 py-2 bg-white border border-slate-300 text-sm font-medium rounded-lg hover:bg-slate-50 transition">Anterior</a>
+                {% endif %}
+                {% if pagination.has_next %}
+                <a href="{{ url_for('complaints.list_complaints', page=pagination.next_num, estado=estado) }}" class="px-4 py-2 bg-white border border-slate-300 text-sm font-medium rounded-lg hover:bg-slate-50 transition">Siguiente</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

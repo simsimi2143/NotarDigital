@@ -1,69 +1,108 @@
 {% extends "base.html" %}
 
-{% block title %}Usuarios{% endblock %}
+{% block title %}Gestión de Usuarios | Notaría{% endblock %}
 
 {% block content %}
-<div class="container mx-auto p-4">
-    <div class="flex justify-between items-center mb-4">
-        <h1 class="text-2xl font-bold">Lista de Usuarios</h1>
-        <a href="{{ url_for('admin.new_user') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            + Nuevo Usuario
+<div class="container mx-auto p-8 max-w-6xl">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-gray-200 pb-6">
+        <div>
+            <h1 class="text-3xl font-serif font-bold text-slate-800">Panel de Usuarios</h1>
+            <p class="text-slate-500 text-sm mt-1">Administración de credenciales y accesos del sistema notarial.</p>
+        </div>
+        <a href="{{ url_for('admin.new_user') }}" 
+           class="mt-4 md:mt-0 inline-flex items-center bg-slate-800 hover:bg-slate-700 text-white font-medium py-2.5 px-5 rounded-lg transition duration-200 shadow-sm">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Registrar Nuevo Usuario
         </a>
     </div>
 
-    <div class="overflow-x-auto">
-        <table class="min-w-full bg-white border">
-            <thead>
-                <tr class="bg-gray-100">
-                    <th class="px-6 py-3 border-b text-left">ID</th>
-                    <th class="px-6 py-3 border-b text-left">Nombre</th>
-                    <th class="px-6 py-3 border-b text-left">Email</th>
-                    <th class="px-6 py-3 border-b text-left">Estado</th>
-                    <th class="px-6 py-3 border-b text-left">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr>
-                    <td class="px-6 py-4 border-b">{{ user.id }}</td>
-                    <td class="px-6 py-4 border-b">{{ user.nombre }}</td>
-                    <td class="px-6 py-4 border-b">{{ user.email }}</td>
-                    <td class="px-6 py-4 border-b">
-                        {% if user.activo %}
-                        <span class="text-green-600">Activo</span>
-                        {% else %}
-                        <span class="text-red-600">Inactivo</span>
-                        {% endif %}
-                    </td>
-                    <td class="px-6 py-4 border-b text-center space-x-2">
-                        <a href="{{ url_for('admin.edit_user', id=user.id) }}" class="text-blue-700 hover:underline">Editar</a>
-                        <form action="{{ url_for('admin.toggle_user_active', id=user.id) }}" method="POST" class="inline">
-                            <button class="text-purple-700 hover:underline">
-                                {% if user.activo %}Desactivar{% else %}Activar{% endif %}
-                            </button>
-                        </form>
-                    </td>
-                </tr>
+    <div class="bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-slate-200">
+                <thead class="bg-slate-50">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">ID</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Información Personal</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Estado de Cuenta</th>
+                        <th class="px-6 py-4 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider">Acciones de Control</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 bg-white">
+                    {% for user in users %}
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-400">
+                            #{{ user.id }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex flex-col">
+                                <span class="text-sm font-semibold text-slate-800">{{ user.nombre }}</span>
+                                <span class="text-sm text-slate-500">{{ user.email }}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% if user.activo %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+                                <span class="w-2 h-2 mr-1.5 bg-emerald-500 rounded-full"></span>
+                                Activo
+                            </span>
+                            {% else %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-500">
+                                <span class="w-2 h-2 mr-1.5 bg-slate-400 rounded-full"></span>
+                                Inactivo
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                            <div class="flex justify-center items-center space-x-4">
+                                <a href="{{ url_for('admin.edit_user', id=user.id) }}" 
+                                   class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 px-3 py-1 rounded-md transition">
+                                   Editar
+                                </a>
+                                <form action="{{ url_for('admin.toggle_user_active', id=user.id) }}" method="POST" class="inline">
+                                    <button class="{% if user.activo %}text-amber-600 hover:text-amber-800 bg-amber-50{% else %}text-emerald-600 hover:text-emerald-800 bg-emerald-50{% endif %} px-3 py-1 rounded-md transition">
+                                        {% if user.activo %}Desactivar{% else %}Activar{% endif %}
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="px-6 py-12 text-center text-slate-400 italic">
+                            No existen registros de usuarios en la base de datos.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="bg-slate-50 px-6 py-4 border-t border-slate-200 flex items-center justify-between">
+            <div class="text-sm text-slate-500">
+                Página <span class="font-semibold text-slate-700">{{ pagination.page }}</span> de <span class="font-semibold text-slate-700">{{ pagination.pages or 1 }}</span>
+            </div>
+            <div class="inline-flex shadow-sm rounded-md">
+                {% if pagination.has_prev %}
+                <a href="{{ url_for('admin.list_users', page=pagination.prev_num) }}" 
+                   class="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-l-lg hover:bg-slate-50 transition">
+                    Anterior
+                </a>
                 {% else %}
-                <tr>
-                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">No hay usuarios registrados.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div class="mt-6 flex justify-center gap-2">
-        {% if pagination.has_prev %}
-            <a href="{{ url_for('admin.list_users', page=pagination.prev_num) }}" class="px-3 py-1 bg-gray-300 rounded">Anterior</a>
-        {% endif %}
-        
-        <span class="px-3 py-1 bg-white rounded shadow">
-            Página {{ pagination.page }} de {{ pagination.pages or 1 }}
-        </span>
-    
-        {% if pagination.has_next %}
-            <a href="{{ url_for('admin.list_users', page=pagination.next_num) }}" class="px-3 py-1 bg-gray-300 rounded">Siguiente</a>
-        {% endif %}
+                <span class="px-4 py-2 text-sm font-medium text-slate-300 bg-white border border-slate-300 rounded-l-lg cursor-not-allowed">Anterior</span>
+                {% endif %}
+
+                {% if pagination.has_next %}
+                <a href="{{ url_for('admin.list_users', page=pagination.next_num) }}" 
+                   class="px-4 py-2 text-sm font-medium text-slate-700 bg-white border-t border-b border-r border-slate-300 rounded-r-lg hover:bg-slate-50 transition">
+                    Siguiente
+                </a>
+                {% else %}
+                <span class="px-4 py-2 text-sm font-medium text-slate-300 bg-white border-t border-b border-r border-slate-300 rounded-r-lg cursor-not-allowed">Siguiente</span>
+                {% endif %}
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

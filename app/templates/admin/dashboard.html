@@ -1,132 +1,232 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<h1 class="text-3xl font-bold mb-8">Dashboard de Gestión</h1>
+<div class="p-4 md:p-8 bg-slate-50 min-h-screen text-slate-900">
 
-<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-10">
-    <div class="bg-white p-6 rounded-lg shadow border-l-4 border-blue-500">
-        <p class="text-sm text-gray-500 uppercase font-bold">Total Documentos</p>
-        <p class="text-2xl font-bold">{{ stats.total_docs }}</p>
-    </div>
-    <div class="bg-white p-6 rounded-lg shadow border-l-4 border-green-500">
-        <p class="text-sm text-gray-500 uppercase font-bold">Firmados</p>
-        <p class="text-2xl font-bold">{{ stats.docs_firmados }}</p>
-    </div>
-    <div class="bg-white p-6 rounded-lg shadow border-l-4 border-red-500">
-        <p class="text-sm text-gray-500 uppercase font-bold">Reclamos Pendientes</p>
-        <p class="text-2xl font-bold">{{ stats.reclamos_pendientes }}</p>
-    </div>
-    <div class="bg-white p-6 rounded-lg shadow border-l-4 border-purple-500">
-        <p class="text-sm text-gray-500 uppercase font-bold">Usuarios</p>
-        <p class="text-2xl font-bold">{{ stats.usuarios_activos }}</p>
-    </div>
-    <div class="bg-white p-6 rounded-lg shadow border-l-4 border-yellow-500">
-        <p class="text-sm text-gray-500 uppercase font-bold">Sanciones</p>
-        <p class="text-2xl font-bold">{{ stats.sanciones_vigentes }}</p>
-    </div>
-</div>
-
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-    <div class="bg-white p-6 rounded shadow">
-        <h2 class="text-xl font-bold mb-4">Documentos por Estado</h2>
-        <canvas id="docsChart"></canvas>
-    </div>
-    <div class="bg-white p-6 rounded shadow">
-        <h2 class="text-xl font-bold mb-4">Reclamos por Estado</h2>
-        <canvas id="complaintsChart"></canvas>
-    </div>
-</div>
-
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div class="bg-white p-6 rounded-lg shadow">
-        <h2 class="text-xl font-bold mb-4">Accesos Rápidos</h2>
-        <div class="grid grid-cols-2 gap-2">
-            <a href="{{ url_for('documents.list_documents') }}" class="bg-blue-50 text-blue-700 p-3 rounded text-center hover:bg-blue-100">
-                Gestión Documentos
-            </a>
-
-            <a href="{{ url_for('admin.services') }}" class="bg-blue-50 text-blue-700 p-3 rounded text-center hover:bg-blue-100">
-                Servicios
-            </a>
-
-            <a href="{{ url_for('admin.list_users') }}" class="bg-blue-50 text-blue-700 p-3 rounded text-center hover:bg-blue-100">
-                Personal
-            </a>
-
-            <a href="{{ url_for('admin.office_config') }}" class="bg-blue-50 text-blue-700 p-3 rounded text-center hover:bg-blue-100">
-                Configuración
-            </a>
-
-            <a href="{{ url_for('audits.list_audits') }}" class="bg-blue-50 text-blue-700 p-3 rounded text-center hover:bg-blue-100">
-                Auditoría
-            </a>
-
-            <a href="{{ url_for('backups.list_backups') }}" class="bg-blue-50 text-blue-700 p-3 rounded text-center hover:bg-blue-100">
-                Respaldos
-            </a>
-
-            <a href="{{ url_for('sanctions.list_sanctions') }}" class="bg-blue-50 text-blue-700 p-3 rounded text-center hover:bg-blue-100">
-                Sanciones
-            </a>
-
-            <a href="{{ url_for('complaints.list_complaints') }}" class="bg-blue-50 text-blue-700 p-3 rounded text-center hover:bg-blue-100">
-                Reclamos
+    <header class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-3xl font-extrabold text-blue-950 tracking-tight">Gestión Notarial</h1>
+            <p class="text-slate-500 text-sm">Bienvenido al panel de control operativo.</p>
+        </div>
+        <div class="flex gap-2">
+            <button onclick="window.print()" class="p-2.5 bg-white border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors shadow-sm">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+            </button>
+            <a href="{{ url_for('documents.list_documents') }}" class="inline-flex items-center px-5 py-2.5 bg-blue-900 text-white text-sm font-semibold rounded-lg shadow-sm hover:bg-blue-800 transition-colors gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                Nuevo Documento
             </a>
         </div>
-    </div>
+    </header>
 
-    <div class="bg-white p-6 rounded-lg shadow">
-        <h2 class="text-xl font-bold mb-4">Últimos Movimientos</h2>
-        <div class="space-y-3">
-            {% for log in recent_logs %}
-            <div class="border-b pb-2">
-                <p class="text-sm font-semibold">
-                    {{ users[log.user_id].nombre if log.user_id in users else 'Sistema' }}
-                </p>
-                <p class="text-sm text-gray-700">{{ log.modulo }} - {{ log.accion }}</p>
-                <p class="text-xs text-gray-500">{{ log.fecha.strftime('%d-%m-%Y %H:%M') }}</p>
-            </div>
-            {% else %}
-            <p class="text-sm text-gray-500">No hay movimientos registrados.</p>
+    <section class="mb-10">
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+            {% set modulos = [
+                ('documents.list_documents', 'Documentos', 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'),
+                ('admin.services', 'Servicios', 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'),
+                ('admin.list_users', 'Personal', 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'),
+                ('complaints.list_complaints', 'Reclamos', 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'),
+                ('sanctions.list_sanctions', 'Sanciones', 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'),
+                ('audits.list_audits', 'Auditoría', 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01'),
+                ('backups.list_backups', 'Backups', 'M4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.58 4 8 4s8-1.79 8-4M4 7c0-2.21 3.58-4 8-4s8 1.79 8 4m0 5c0 2.21-3.58 4-8 4s-8-1.79-8-4'),
+                ('admin.office_config', 'Ajustes', 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z')
+            ] %}
+            {% for url, name, icon_svg in modulos %}
+            <a href="{{ url_for(url) }}" class="group flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-blue-900 hover:border-blue-900 transition-all duration-200 shadow-sm">
+                <span class="text-blue-900 group-hover:text-white mb-2 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="{{ icon_svg }}"></path></svg>
+                </span>
+                <span class="text-[11px] font-bold uppercase tracking-tight text-slate-600 group-hover:text-blue-50">{{ name }}</span>
+            </a>
             {% endfor %}
         </div>
+    </section>
 
-        <a href="{{ url_for('audits.list_audits') }}" class="text-blue-600 underline text-sm mt-3 inline-block">
-            Ver todo el log
-        </a>
+    <section class="mb-10">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div class="bg-white px-5 py-4 rounded-xl border border-slate-200 flex items-center gap-4 shadow-sm">
+                <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 11h.01M7 15h.01M13 7h.01M13 11h.01M13 15h.01M17 7h.01M17 11h.01M17 15h.01"></path></svg>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Documentos</p>
+                    <p class="text-xl font-black text-blue-950">{{ stats.total_docs }}</p>
+                </div>
+            </div>
+            <div class="bg-white px-5 py-4 rounded-xl border border-slate-200 flex items-center gap-4 shadow-sm border-l-4 border-l-emerald-500">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Firmados</p>
+                    <p class="text-xl font-black text-blue-950">{{ stats.docs_firmados }}</p>
+                </div>
+            </div>
+            <div class="bg-white px-5 py-4 rounded-xl border border-slate-200 flex items-center gap-4 shadow-sm border-l-4 border-l-red-500">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Pendientes</p>
+                    <p class="text-xl font-black text-blue-950">{{ stats.reclamos_pendientes }}</p>
+                </div>
+            </div>
+            <div class="bg-white px-5 py-4 rounded-xl border border-slate-200 flex items-center gap-4 shadow-sm">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Personal</p>
+                    <p class="text-xl font-black text-blue-950">{{ stats.usuarios_activos }}</p>
+                </div>
+            </div>
+            <div class="bg-white px-5 py-4 rounded-xl border border-slate-200 flex items-center gap-4 shadow-sm border-l-4 border-l-amber-500">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Sanciones</p>
+                    <p class="text-xl font-black text-blue-950">{{ stats.sanciones_vigentes }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+        
+        <div class="xl:col-span-2 space-y-8">
+            
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <h3 class="text-lg font-bold text-blue-950 mb-6 flex items-center gap-2.5">
+                    <span class="w-1.5 h-6 bg-emerald-500 rounded-full"></span>
+                    Estado General de Documentos
+                </h3>
+                <div class="h-80 w-full relative">
+                    <canvas id="docsChart"></canvas>
+                    <div id="docsLegend" class="mt-4 flex flex-wrap gap-x-5 gap-y-2 justify-center text-xs text-slate-600"></div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <h3 class="text-lg font-bold text-blue-950 mb-6 flex items-center gap-2.5">
+                    <span class="w-1.5 h-6 bg-red-500 rounded-full"></span>
+                    Estado Operativo de Reclamos
+                </h3>
+                <div class="h-80 w-full relative">
+                    <canvas id="complaintsChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <h3 class="text-lg font-bold text-blue-950 mb-6 flex items-center justify-between">
+                Actividad Reciente
+                <a href="{{ url_for('audits.list_audits') }}" class="text-xs text-blue-600 hover:underline">Ver historial</a>
+            </h3>
+            <div class="space-y-4">
+                {% for log in recent_logs %}
+                <div class="flex gap-3 pb-4 border-b border-slate-50 last:border-0">
+                    <div class="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-500 uppercase">
+                        {{ users[log.user_id].nombre[:2] if log.user_id in users else 'SY' }}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs font-bold text-slate-900 truncate">
+                            {{ users[log.user_id].nombre if log.user_id in users else 'Sistema' }}
+                        </p>
+                        <p class="text-[11px] text-slate-500 truncate">{{ log.modulo }} — {{ log.accion }}</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">{{ log.fecha.strftime('%H:%M · %d/%m/%y') }}</p>
+                    </div>
+                </div>
+                {% else %}
+                <div class="text-center py-8 text-slate-500 text-sm">No hay movimientos.</div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-const docsCtx = document.getElementById('docsChart');
-new Chart(docsCtx, {
-    type: 'doughnut',
-    data: {
-        labels: {{ docs_labels|tojson }},
-        datasets: [{
-            data: {{ docs_values|tojson }},
-            backgroundColor: ['#3B82F6', '#22C55E', '#F59E0B', '#EF4444', '#8B5CF6', '#6B7280']
-        }]
-    }
-});
+    // Configuración global
+    Chart.defaults.font.family = "Inter, sans-serif";
+    Chart.defaults.color = '#94a3b8'; // slate-400
 
-const complaintsCtx = document.getElementById('complaintsChart');
-new Chart(complaintsCtx, {
-    type: 'bar',
-    data: {
-        labels: {{ complaints_labels|tojson }},
-        datasets: [{
-            label: 'Reclamos',
-            data: {{ complaints_values|tojson }},
-            backgroundColor: '#2563EB'
-        }]
-    },
-    options: {
+    // Opciones comunes
+    const commonOptions = {
         responsive: true,
-        scales: {
-            y: { beginAtZero: true }
+        maintainAspectRatio: false,
+    };
+
+    // 1. Gráfico de Documentos (Doughnut)
+    const docsCtx = document.getElementById('docsChart').getContext('2d');
+    const docsLabels = {{ docs_labels|tojson }};
+    const docsValues = {{ docs_values|tojson }};
+    const docsColors = ['#1e293b', '#10b981', '#f59e0b', '#ef4444']; // Slate, Emerald, Amber, Red
+
+    new Chart(docsCtx, {
+        type: 'doughnut',
+        data: {
+            labels: docsLabels,
+            datasets: [{
+                data: docsValues,
+                backgroundColor: docsColors,
+                borderWidth: 0,
+                cutout: '75%' // Hace el anillo más fino
+            }]
+        },
+        options: {
+            ...commonOptions,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: true,
+                        pointStyle: 'rectRounded',
+                        padding: 15,
+                        font: { size: 11 }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: '#1e293b', // slate-800
+                    titleFont: { size: 13 },
+                    bodyFont: { size: 12 },
+                    padding: 10,
+                    cornerRadius: 6
+                }
+            }
         }
-    }
-});
+    });
+
+    // 2. Gráfico de Reclamos (Bar)
+    const complaintsCtx = document.getElementById('complaintsChart').getContext('2d');
+    const complaintsLabels = {{ complaints_labels|tojson }};
+    const complaintsValues = {{ complaints_values|tojson }};
+
+    new Chart(complaintsCtx, {
+        type: 'bar',
+        data: {
+            labels: complaintsLabels,
+            datasets: [{
+                data: complaintsValues,
+                backgroundColor: '#ef4444', // Rojo para reclamos
+                borderRadius: 5,
+                borderSkipped: false,
+                barThickness: 35 // Barras más estilizadas
+            }]
+        },
+        options: {
+            ...commonOptions,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: '#1e293b',
+                    padding: 10,
+                    cornerRadius: 6
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { font: { size: 11, weight: '500' }, color: '#475569' } // slate-600
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: { stepSize: 1, font: { size: 11 } },
+                    grid: { color: '#f1f5f9' }, // slate-100 (muy sutil)
+                    border: { dash: [4, 4] } // Línea base discontinua
+                }
+            }
+        }
+    });
 </script>
 {% endblock %}

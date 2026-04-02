@@ -15,11 +15,11 @@
 </head>
 <body class="bg-gray-100 text-gray-900 flex flex-col min-h-screen">
 
-    <nav class="bg-blue-900 text-white p-4 sticky top-0 z-50 shadow-md">
+    <nav class="bg-indigo-900 text-white p-4 sticky top-0 z-50 shadow-md">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-4">
                 {% if current_user.is_authenticated %}
-                <button onclick="toggleSidebar()" class="p-2 hover:bg-blue-800 rounded-lg transition-colors">
+                <button onclick="toggleSidebar()" class="p-2 hover:bg-indigo-800 rounded-lg transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
@@ -29,13 +29,13 @@
             </div>
 
             <div class="space-x-6 text-sm flex items-center">
-                <a href="{{ url_for('public.services') }}" class="hover:text-blue-200 transition">Servicios</a>
-                <a href="{{ url_for('public.public_complaints') }}" class="hover:text-blue-200 transition">Reclamos</a>
-                <a href="{{ url_for('public.public_sanctions') }}" class="hover:text-blue-200 transition">Sanciones</a>
-                <a href="{{ url_for('public.verify_document') }}" class="hover:text-blue-200 transition">Verificar documento</a>
+                <a href="{{ url_for('public.services') }}" class="hover:text-amber-200 transition">Servicios</a>
+                <a href="{{ url_for('public.public_complaints') }}" class="hover:text-amber-200 transition">Reclamos</a>
+                <a href="{{ url_for('public.public_sanctions') }}" class="hover:text-amber-200 transition">Sanciones</a>
+                <a href="{{ url_for('public.verify_document') }}" class="hover:text-amber-200 transition">Verificar documento</a>
 
                 {% if not current_user.is_authenticated %}
-                    <a href="{{ url_for('auth.login') }}" class="bg-blue-700 px-4 py-2 rounded-lg hover:bg-blue-600 transition">Acceso</a>
+                    <a href="{{ url_for('auth.login') }}" class="bg-indigo-700 px-4 py-2 rounded-lg hover:bg-indigo-600 transition">Acceso</a>
                 {% endif %}
             </div>
         </div>
@@ -115,14 +115,16 @@
     </aside>
     {% endif %}
 
-    <main class="flex-grow max-w-7xl mx-auto p-6 w-full">
+    <main class="flex-grow w-full">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% for category, message in messages %}
-                <div class="mb-4 p-4 rounded-lg bg-white shadow-sm border-l-4 
-                    {% if category == 'success' %} border-green-500 text-green-700
-                    {% elif category == 'danger' %} border-red-500 text-red-700
-                    {% else %} border-blue-500 text-blue-700 {% endif %}">
-                    {{ message }}
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+                    <div class="mb-4 p-4 rounded-lg bg-white shadow-sm border-l-4 
+                        {% if category == 'success' %} border-green-500 text-green-700
+                        {% elif category == 'danger' %} border-red-500 text-red-700
+                        {% else %} border-amber-500 text-amber-700 {% endif %}">
+                        {{ message }}
+                    </div>
                 </div>
             {% endfor %}
         {% endwith %}
@@ -130,5 +132,6 @@
         {% block content %}{% endblock %}
     </main>
 
+    {% block footer %}{% endblock %}
 </body>
 </html>

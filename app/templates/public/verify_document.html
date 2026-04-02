@@ -1,40 +1,174 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="max-w-3xl mx-auto">
-    <h1 class="text-3xl font-bold mb-6">Verificación de documento</h1>
-
-    <form method="GET" class="bg-white p-6 rounded shadow mb-6">
-        <label class="block font-semibold mb-2">Código de verificación</label>
-        <div class="flex gap-2">
-            <input type="text" name="code" placeholder="Ingrese código" class="border p-2 rounded w-full">
-            <button class="bg-blue-700 text-white px-4 py-2 rounded">Verificar</button>
-        </div>
-    </form>
-
-    {% if document %}
-    <div class="bg-white p-6 rounded shadow">
-        <h2 class="text-xl font-bold mb-4 text-green-700">Documento encontrado</h2>
-        <div class="space-y-2">
-            <p><strong>Folio:</strong> {{ document.folio }}</p>
-            <p><strong>Título:</strong> {{ document.titulo }}</p>
-            <p><strong>Estado:</strong> {{ document.estado }}</p>
-            <p><strong>Proveedor firma:</strong> {{ document.provider_signature or 'No informado' }}</p>
-            <p><strong>Fecha firma:</strong> {{ document.signed_at.strftime('%d-%m-%Y %H:%M') if document.signed_at else 'No disponible' }}</p>
-            <p><strong>Hash:</strong> {{ document.hash_signed_file }}</p>
-        </div>
-
-        {% if document.copy_file_path %}
-        <div class="mt-4">
-            <a href="{{ url_for('public.public_copy_download', filename=document.copy_file_path) }}" class="bg-blue-700 text-white px-4 py-2 rounded">
-                Descargar copia electrónica
-            </a>
-        </div>
-        {% endif %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="text-center mb-8">
+        <h1 class="text-3xl sm:text-4xl font-serif font-bold text-slate-900 mb-3">Verificación de Documento</h1>
+        <p class="text-slate-600">Consulte el estado actual de su trámite o documento mediante el código que le fue entregado.</p>
     </div>
-    {% elif request.args.get('code') %}
-    <div class="bg-white p-6 rounded shadow">
-        <p class="text-red-600 font-semibold">No se encontró un documento con ese código.</p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Columna izquierda: instructivo -->
+        <div class="lg:col-span-1">
+            <div class="bg-indigo-50 rounded-2xl p-6 border border-indigo-100 sticky top-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <h2 class="text-lg font-bold text-indigo-900">¿Cómo funciona?</h2>
+                </div>
+                <ul class="space-y-3 text-slate-700 text-sm">
+                    <li class="flex gap-2">
+                        <span class="font-bold text-indigo-600">1.</span>
+                        <span>Ingrese el código de verificación que recibió por correo electrónico o en el comprobante de su trámite.</span>
+                    </li>
+                    <li class="flex gap-2">
+                        <span class="font-bold text-indigo-600">2.</span>
+                        <span>El sistema mostrará el estado actual del documento (borrador, en revisión, pendiente firma, firmado, etc.).</span>
+                    </li>
+                    <li class="flex gap-2">
+                        <span class="font-bold text-indigo-600">3.</span>
+                        <span>Si el documento ya está firmado, podrá descargar tanto el documento firmado original como la copia electrónica autorizada.</span>
+                    </li>
+                </ul>
+                <div class="mt-4 bg-amber-50 p-3 rounded-xl text-xs text-amber-800">
+                    <p><strong>📌 Plazos orientativos:</strong></p>
+                    <ul class="list-disc list-inside mt-1 space-y-1">
+                        <li>Documentos simples: 24-48 hrs hábiles</li>
+                        <li>Escrituras públicas: 3-5 días hábiles</li>
+                        <li>Constitución de sociedades: 5-7 días hábiles</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna derecha: formulario y resultado -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 sm:p-8">
+                <form method="GET" class="mb-8">
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Código de verificación</label>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <input type="text" name="code" value="{{ request.args.get('code', '') }}" 
+                               placeholder="Ej: ABC123DEF456"
+                               class="flex-1 border border-slate-300 rounded-xl px-4 py-3 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-xl transition whitespace-nowrap">
+                            Verificar documento
+                        </button>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2">* El código es único y fue entregado al momento de iniciar su trámite.</p>
+                </form>
+
+                {% if document %}
+                <div class="border-t border-slate-100 pt-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        {% if document.estado == 'firmado' %}
+                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        {% elif document.estado == 'en_revision' %}
+                        <div class="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        {% elif document.estado == 'pendiente_firma_externa' %}
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"></path></svg>
+                        </div>
+                        {% else %}
+                        <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        </div>
+                        {% endif %}
+                        <h2 class="text-xl font-bold text-slate-900">Documento encontrado</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="bg-slate-50 rounded-xl p-4">
+                            <p class="text-xs uppercase font-bold text-slate-500 tracking-wider">Folio</p>
+                            <p class="text-lg font-mono font-bold text-slate-800">{{ document.folio }}</p>
+                        </div>
+                        <div class="bg-slate-50 rounded-xl p-4">
+                            <p class="text-xs uppercase font-bold text-slate-500 tracking-wider">Título / Tipo</p>
+                            <p class="text-lg font-bold text-slate-800">{{ document.titulo }}</p>
+                            <p class="text-sm text-slate-500">{{ document.tipo_documento }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Estado del documento con estilo visual -->
+                    <div class="mb-6">
+                        <p class="text-sm font-medium text-slate-700 mb-2">Estado actual del trámite</p>
+                        {% set estado_config = {
+                            'borrador': {'color': 'bg-slate-100 text-slate-700', 'icono': '📄', 'texto': 'Borrador - El documento está siendo preparado'},
+                            'en_revision': {'color': 'bg-amber-100 text-amber-800', 'icono': '🔍', 'texto': 'En revisión - Nuestro equipo está validando la documentación'},
+                            'pendiente_firma_externa': {'color': 'bg-blue-100 text-blue-800', 'icono': '✍️', 'texto': 'Pendiente firma externa - Esperando la firma de las partes involucradas'},
+                            'firmado': {'color': 'bg-green-100 text-green-800', 'icono': '✅', 'texto': 'Firmado - El documento ya cuenta con todas las firmas requeridas'},
+                            'publicado': {'color': 'bg-indigo-100 text-indigo-800', 'icono': '📢', 'texto': 'Publicado - El documento está disponible en formato electrónico'},
+                            'archivado': {'color': 'bg-slate-100 text-slate-600', 'icono': '📦', 'texto': 'Archivado - Trámite finalizado y almacenado'},
+                            'anulado': {'color': 'bg-red-100 text-red-800', 'icono': '⚠️', 'texto': 'Anulado - El documento no tiene validez'}
+                        } %}
+                        {% set estado_info = estado_config.get(document.estado, {'color': 'bg-slate-100 text-slate-700', 'icono': '📌', 'texto': document.estado|replace('_', ' ')|title}) %}
+                        <div class="rounded-xl p-4 {{ estado_info.color }}">
+                            <div class="flex items-center gap-2">
+                                <span class="text-2xl">{{ estado_info.icono }}</span>
+                                <div>
+                                    <p class="font-bold">{{ document.estado|replace('_', ' ')|title }}</p>
+                                    <p class="text-sm">{{ estado_info.texto }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Información adicional -->
+                    <div class="space-y-3 text-sm mb-6">
+                        {% if document.signed_at %}
+                        <p><strong class="text-slate-700">Fecha de firma:</strong> {{ document.signed_at.strftime('%d/%m/%Y %H:%M') }}</p>
+                        {% endif %}
+                        {% if document.provider_signature %}
+                        <p><strong class="text-slate-700">Proveedor de firma:</strong> {{ document.provider_signature|upper }}</p>
+                        {% endif %}
+                        <p><strong class="text-slate-700">Hash del documento:</strong> <span class="font-mono text-xs">{{ document.hash_signed_file or 'No disponible' }}</span></p>
+                    </div>
+
+                    <!-- Botones de descarga (ambos) -->
+                    {% if document.estado in ['firmado', 'publicado'] %}
+                    <div class="bg-green-50 rounded-xl p-4 border border-green-100">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between flex-wrap gap-4">
+                            <div>
+                                <p class="font-bold text-green-800">Documentos disponibles para descargar</p>
+                                <p class="text-sm text-green-700">Ambos documentos cuentan con validez legal.</p>
+                            </div>
+                            <div class="flex flex-wrap gap-3">
+                                {% if document.signed_file_path %}
+                                <a href="{{ url_for('public.download_signed_document', filename=document.signed_file_path) }}" 
+                                   class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2 rounded-xl transition flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Descargar documento firmado
+                                </a>
+                                {% endif %}
+                                {% if document.copy_file_path %}
+                                <a href="{{ url_for('public.public_copy_download', filename=document.copy_file_path) }}" 
+                                   class="bg-green-600 hover:bg-green-700 text-white font-medium px-5 py-2 rounded-xl transition flex items-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                    Descargar copia electrónica
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% elif document.estado in ['borrador', 'en_revision', 'pendiente_firma_externa'] %}
+                    <div class="bg-amber-50 rounded-xl p-4 border border-amber-100">
+                        <p class="text-amber-800 text-sm flex items-start gap-2">
+                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span>El documento aún no está finalizado. Una vez que se complete la firma, podrá descargar las versiones autorizadas desde esta misma página.</span>
+                        </p>
+                    </div>
+                    {% endif %}
+                </div>
+                {% elif request.args.get('code') %}
+                <div class="text-center p-6 bg-red-50 rounded-xl border border-red-100">
+                    <svg class="w-12 h-12 text-red-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <p class="text-red-700 font-medium">No se encontró un documento con el código ingresado.</p>
+                    <p class="text-sm text-red-600 mt-1">Verifique que el código sea correcto y que no haya expirado.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
-    {% endif %}
 </div>
 {% endblock %}

@@ -1,43 +1,62 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="bg-white p-6 rounded shadow max-w-2xl">
-    <h1 class="text-2xl font-bold mb-4">
-        {% if service %}Editar Servicio{% else %}Nuevo Servicio{% endif %}
-    </h1>
-
-    <form method="POST" action="{% if service %}{{ url_for('admin.edit_service', id=service.id) }}{% else %}{{ url_for('admin.new_service') }}{% endif %}">
-        {{ form.hidden_tag() }}
-
-        <div class="mb-3">
-            {{ form.nombre.label(class="block mb-1") }}
-            {{ form.nombre(class="w-full border rounded p-2") }}
-            {% for error in form.nombre.errors %}
-                <p class="text-red-600 text-sm">{{ error }}</p>
-            {% endfor %}
+<div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 sm:p-8">
+        <div class="border-b border-slate-100 pb-4 mb-6">
+            <h1 class="text-2xl font-serif font-bold text-slate-900">
+                {% if service %}Editar Servicio{% else %}Nuevo Servicio{% endif %}
+            </h1>
+            <p class="text-slate-500 text-sm mt-1">
+                {% if service %}Modifique los datos del servicio{% else %}Complete el formulario para agregar un nuevo servicio{% endif %}
+            </p>
         </div>
 
-        <div class="mb-3">
-            {{ form.descripcion.label(class="block mb-1") }}
-            {{ form.descripcion(class="w-full border rounded p-2") }}
-            {% for error in form.descripcion.errors %}
-                <p class="text-red-600 text-sm">{{ error }}</p>
-            {% endfor %}
-        </div>
+        <form method="POST" action="{% if service %}{{ url_for('admin.edit_service', id=service.id) }}{% else %}{{ url_for('admin.new_service') }}{% endif %}">
+            {{ form.hidden_tag() }}
 
-        <div class="mb-3">
-            {{ form.tarifa.label(class="block mb-1") }}
-            {{ form.tarifa(class="w-full border rounded p-2") }}
-            {% for error in form.tarifa.errors %}
-                <p class="text-red-600 text-sm">{{ error }}</p>
-            {% endfor %}
-        </div>
+            <!-- Campo: Nombre -->
+            <div class="mb-5">
+                {{ form.nombre.label(class="block text-sm font-medium text-slate-700 mb-1") }}
+                {{ form.nombre(class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 transition", placeholder="Ej: Testamento") }}
+                {% for error in form.nombre.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ error }}</p>
+                {% endfor %}
+            </div>
 
-        <div class="mb-4 flex items-center gap-2">
-            {{ form.activo() }}
-            {{ form.activo.label }}
-        </div>
+            <!-- Campo: Descripción -->
+            <div class="mb-5">
+                {{ form.descripcion.label(class="block text-sm font-medium text-slate-700 mb-1") }}
+                {{ form.descripcion(class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 transition", rows="4", placeholder="Descripción detallada del servicio...") }}
+                {% for error in form.descripcion.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ error }}</p>
+                {% endfor %}
+            </div>
 
-        {{ form.submit(class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800") }}
-    </form>
+            <!-- Campo: Tarifa -->
+            <div class="mb-5">
+                {{ form.tarifa.label(class="block text-sm font-medium text-slate-700 mb-1") }}
+                {{ form.tarifa(class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 transition", placeholder="Ej: 25000") }}
+                <p class="text-xs text-slate-500 mt-1">Ingrese el valor en pesos chilenos (sin puntos ni comas).</p>
+                {% for error in form.tarifa.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <!-- Campo: Activo (checkbox) -->
+            <div class="mb-6 flex items-center gap-3">
+                {{ form.activo(class="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500") }}
+                {{ form.activo.label(class="text-sm font-medium text-slate-700") }}
+            </div>
+
+            <!-- Botones -->
+            <div class="flex flex-wrap gap-3">
+                {{ form.submit(class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2 rounded-xl transition shadow-sm") }}
+                <a href="{{ url_for('admin.services') }}" 
+                   class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-medium px-6 py-2 rounded-xl transition">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}

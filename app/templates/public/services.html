@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <!-- Encabezado con filtros -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-10 gap-4">
         <div>
             <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight">Servicios y Tarifas</h1>
-            <p class="mt-2 text-lg text-gray-600">Filtra y consulta costos instantáneamente.</p>
+            <p class="mt-2 text-lg text-gray-600">Filtra, busca y consulta los requisitos.</p>
         </div>
         
         <div class="relative w-full md:w-96">
             <input type="text" id="searchInput" 
                    placeholder="Escribe para buscar..." 
-                   class="w-full pl-4 pr-12 py-3 border-2 border-gray-200 rounded-2xl focus:border-blue-500 focus:ring-0 transition-all outline-none shadow-sm">
+                   class="w-full pl-4 pr-12 py-3 border-2 border-gray-200 rounded-2xl focus:border-indigo-500 focus:ring-0 transition-all outline-none shadow-sm">
             <div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -19,82 +20,423 @@
         </div>
     </div>
 
+    <!-- Filtro por precio -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
+        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Filtrar por rango de precio
+        </h3>
+        <div class="flex flex-col sm:flex-row items-center gap-4">
+            <div class="w-full">
+                <input type="range" id="priceSlider" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                <div class="flex justify-between text-sm text-gray-500 mt-2">
+                    <span>$<span id="minPriceLabel">0</span></span>
+                    <span>$<span id="maxPriceLabel">0</span></span>
+                </div>
+            </div>
+            <button id="resetPriceBtn" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm font-medium transition whitespace-nowrap">
+                Restablecer filtro
+            </button>
+        </div>
+    </div>
+
+    <!-- Información de plazos -->
+    <div class="bg-indigo-50 rounded-2xl p-6 mb-8 border border-indigo-100">
+        <h3 class="text-xl font-bold text-indigo-900 mb-4 flex items-center gap-2">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Plazos estándar en notarías chilenas
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div class="flex items-start gap-3">
+                <span class="w-2 h-2 bg-amber-500 rounded-full mt-1.5"></span>
+                <div>
+                    <p class="font-bold text-gray-800">Actas y certificados simples</p>
+                    <p class="text-gray-600">Inmediato (mismo día)</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-3">
+                <span class="w-2 h-2 bg-amber-500 rounded-full mt-1.5"></span>
+                <div>
+                    <p class="font-bold text-gray-800">Escrituras públicas</p>
+                    <p class="text-gray-600">2 a 5 días hábiles (dependiendo de la complejidad)</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-3">
+                <span class="w-2 h-2 bg-amber-500 rounded-full mt-1.5"></span>
+                <div>
+                    <p class="font-bold text-gray-800">Reconocimiento de firma</p>
+                    <p class="text-gray-600">Inmediato (sin demora)</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-3">
+                <span class="w-2 h-2 bg-amber-500 rounded-full mt-1.5"></span>
+                <div>
+                    <p class="font-bold text-gray-800">Constitución de sociedades</p>
+                    <p class="text-gray-600">3 a 7 días hábiles (incluye inscripción en registro)</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-3">
+                <span class="w-2 h-2 bg-amber-500 rounded-full mt-1.5"></span>
+                <div>
+                    <p class="font-bold text-gray-800">Trámites con documentos extranjeros</p>
+                    <p class="text-gray-600">1 a 3 días hábiles (requiere revisión legal)</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-3">
+                <span class="w-2 h-2 bg-amber-500 rounded-full mt-1.5"></span>
+                <div>
+                    <p class="font-bold text-gray-800">Cualquier gestión con estudio previo</p>
+                    <p class="text-gray-600">Según complejidad, consultar en oficina</p>
+                </div>
+            </div>
+        </div>
+        <p class="text-xs text-indigo-700 mt-4 italic">* Los plazos pueden variar según la carga laboral de la notaría y la correcta presentación de los antecedentes.</p>
+    </div>
+
     {% if services %}
+    <!-- NUEVA TARJETA: Rectificación de escrituras (fojas.cl) -->
+    <div class="mb-12">
+        <div class="bg-gradient-to-r from-indigo-50 to-amber-50 rounded-2xl border border-indigo-100 p-6 hover:shadow-lg transition-shadow">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-12 h-12 bg-indigo-100 rounded-2xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-indigo-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-indigo-900">Rectificación de escrituras</h3>
+                        <span class="bg-amber-100 text-amber-800 text-xs font-semibold px-2 py-1 rounded-full">Online</span>
+                    </div>
+                    <p class="text-gray-700 text-sm mb-4">Utilice el portal <strong class="text-indigo-700">fojas.cl</strong> para consultar y rectificar escrituras públicas inscritas en el Conservador de Bienes Raíces correspondiente.</p>
+                    <button onclick="openFojasModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-5 py-2 rounded-xl transition flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Ver instrucciones
+                    </button>
+                </div>
+                <div class="flex-shrink-0">
+                    <img src="https://www.fojas.cl/img/logo.png" alt="fojas.cl" class="h-12 opacity-80" onerror="this.style.display='none'">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="servicesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {% for service in services %}
-        <div class="service-card group bg-white rounded-3xl p-1 shadow-sm border border-gray-100 hover:shadow-xl hover:border-blue-100 transition-all duration-300 flex flex-col"
+        <div class="service-card group bg-white rounded-3xl p-1 shadow-sm border border-gray-100 hover:shadow-xl hover:border-indigo-100 transition-all duration-300 flex flex-col cursor-pointer"
              data-name="{{ service.nombre | lower }}" 
-             data-desc="{{ service.descripcion | lower }}">
+             data-desc="{{ service.descripcion | lower }}"
+             data-price="{{ service.tarifa }}"
+             onclick="openModal('{{ service.nombre }}')">
             
             <div class="p-6 flex-grow">
-                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                 </div>
-                <h2 class="text-xl font-bold text-gray-800 mb-3 group-hover:text-blue-700 transition-colors">{{ service.nombre }}</h2>
+                <h2 class="text-xl font-bold text-gray-800 mb-3 group-hover:text-indigo-700 transition-colors">{{ service.nombre }}</h2>
                 <p class="text-gray-500 text-sm leading-relaxed">{{ service.descripcion }}</p>
             </div>
             <div class="px-6 py-4 bg-gray-50 rounded-b-[1.4rem] border-t border-gray-100 flex justify-between items-center">
                 <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Tarifa</span>
-                <span class="text-2xl font-black text-blue-600">${{ "{:,.0f}".format(service.tarifa).replace(',', '.') }}</span>
+                <span class="text-2xl font-black text-indigo-600">${{ "{:,.0f}".format(service.tarifa).replace(',', '.') }}</span>
             </div>
         </div>
         {% endfor %}
     </div>
 
-    <div id="noResults" class="hidden text-center py-24 bg-white rounded-3xl border-2 border-dashed border-gray-200">
+    <div id="noResults" class="hidden text-center py-24 bg-white rounded-3xl border-2 border-dashed border-gray-200 mt-8">
         <div class="inline-flex items-center justify-center w-20 h-20 bg-gray-100 text-gray-400 rounded-full mb-6">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 9.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
         </div>
         <h3 class="text-2xl font-bold text-gray-800 mb-2">No hay resultados</h3>
-        <p class="text-gray-500">Intenta con otra palabra clave.</p>
+        <p class="text-gray-500">No encontramos servicios que coincidan con los filtros seleccionados.</p>
     </div>
 
+    <!-- Modal de requisitos (servicios notariales) -->
+    <div id="serviceModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4 transition-all">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl transform transition-all">
+            <div class="flex justify-between items-center p-6 border-b border-gray-100">
+                <h3 id="modalTitle" class="text-xl font-bold text-gray-800"></h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-6">
+                <p class="text-sm font-semibold text-indigo-600 mb-3 uppercase tracking-wider">Requisitos para realizar el trámite</p>
+                <ul class="space-y-3 text-gray-700">
+                    <li class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span>Presentar cédula de identidad vigente.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span>Entregar nombres y apellidos completos.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span>Nacionalidad, estado civil, profesión y domicilio.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <svg class="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span>Ser mayor de edad. En caso de ser menor de edad, este debe comparecer en la forma que determina la ley para cada caso.</span>
+                    </li>
+                </ul>
+                <div class="mt-6 bg-amber-50 p-4 rounded-xl text-sm text-amber-800">
+                    <p class="font-semibold">📄 Importante:</p>
+                    <p class="mt-1">Los documentos extranjeros deben estar legalizados o apostillados según corresponda, y contar con traducción oficial si no están en español.</p>
+                </div>
+            </div>
+            <div class="p-6 border-t border-gray-100 flex justify-end">
+                <button onclick="closeModal()" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl transition font-medium">Entendido</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de instrucciones para fojas.cl -->
+    <div id="fojasModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4 transition-all">
+        <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl transform transition-all max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center p-6 border-b border-gray-100 sticky top-0 bg-white">
+                <h3 class="text-xl font-bold text-indigo-900 flex items-center gap-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    Rectificación de escrituras en línea
+                </h3>
+                <button onclick="closeFojasModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-6 space-y-5">
+                <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
+                    <p class="font-bold text-indigo-800 mb-2">🔍 ¿Qué es fojas.cl?</p>
+                    <p class="text-gray-700 text-sm">Es el portal oficial de los <strong>Conservadores de Bienes Raíces de Chile</strong> que permite consultar y rectificar escrituras públicas inscritas en el sistema de propiedades.</p>
+                </div>
+
+                <div>
+                    <p class="font-bold text-gray-800 mb-3">📋 Pasos para consultar o rectificar una escritura:</p>
+                    <ol class="space-y-4">
+                        <li class="flex gap-3">
+                            <span class="flex-shrink-0 w-6 h-6 bg-indigo-100 text-indigo-700 rounded-full flex items-center justify-center text-sm font-bold">1</span>
+                            <div>
+                                <p class="font-semibold text-gray-800">Seleccione la comuna</p>
+                                <p class="text-sm text-gray-600">En el portal <a href="https://www.fojas.cl/index2.php" target="_blank" class="text-indigo-600 hover:underline">fojas.cl</a>, elija la comuna donde se encuentra inscrita la propiedad.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="flex-shrink-0 w-6 h-6 bg-indigo-100 text-indigo-700 rounded-full flex items-center justify-center text-sm font-bold">2</span>
+                            <div>
+                                <p class="font-semibold text-gray-800">Seleccione la notaría o CBR</p>
+                                <p class="text-sm text-gray-600">Elija la notaría o el Conservador de Bienes Raíces (CBR) donde se otorgó o inscribió la escritura.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="flex-shrink-0 w-6 h-6 bg-indigo-100 text-indigo-700 rounded-full flex items-center justify-center text-sm font-bold">3</span>
+                            <div>
+                                <p class="font-semibold text-gray-800">Ingrese el número de certificado</p>
+                                <p class="text-sm text-gray-600">El número de certificado aparece en el reverso de la escritura o en el comprobante de inscripción. Suele ser un código numérico asociado al documento.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="flex-shrink-0 w-6 h-6 bg-indigo-100 text-indigo-700 rounded-full flex items-center justify-center text-sm font-bold">4</span>
+                            <div>
+                                <p class="font-semibold text-gray-800">Acceda a la información</p>
+                                <p class="text-sm text-gray-600">El sistema mostrará los datos de la escritura, su estado y opciones de rectificación si corresponde.</p>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="bg-amber-50 p-4 rounded-xl border border-amber-100">
+                    <p class="font-semibold text-amber-800 mb-1">⚠️ Importante:</p>
+                    <ul class="text-sm text-amber-800 list-disc list-inside space-y-1">
+                        <li>La rectificación de escrituras debe ser solicitada ante la notaría que otorgó el documento original.</li>
+                        <li>Consulte con el notario los requisitos específicos según el tipo de error a corregir.</li>
+                        <li>En caso de dudas, puede acudir personalmente a nuestra oficina con el documento original.</li>
+                    </ul>
+                </div>
+
+                <div class="text-center pt-2">
+                    <a href="https://www.fojas.cl/index2.php" target="_blank" 
+                       class="inline-flex items-center bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2 rounded-xl transition gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        Ir a fojas.cl
+                    </a>
+                </div>
+            </div>
+            <div class="p-6 border-t border-gray-100 flex justify-end">
+                <button onclick="closeFojasModal()" class="px-5 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-xl transition font-medium">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let allCards = [];
+        let minPrice = 0, maxPrice = 0;
+        let currentPriceMin = 0, currentPriceMax = 0;
+        const searchInput = document.getElementById('searchInput');
+        const priceSlider = document.getElementById('priceSlider');
+        const minPriceLabel = document.getElementById('minPriceLabel');
+        const maxPriceLabel = document.getElementById('maxPriceLabel');
+        const resetBtn = document.getElementById('resetPriceBtn');
+        const noResultsDiv = document.getElementById('noResults');
+        const grid = document.getElementById('servicesGrid');
+
+        // Inicializar datos de tarifas
+        function initPriceFilter() {
+            const cards = document.querySelectorAll('.service-card');
+            let prices = Array.from(cards).map(card => parseFloat(card.dataset.price));
+            if (prices.length === 0) return;
+            minPrice = Math.min(...prices);
+            maxPrice = Math.max(...prices);
+            currentPriceMin = minPrice;
+            currentPriceMax = maxPrice;
+            priceSlider.min = minPrice;
+            priceSlider.max = maxPrice;
+            priceSlider.value = maxPrice;
+            createDoubleSlider();
+        }
+
+        function createDoubleSlider() {
+            const container = document.querySelector('.flex-col.sm\\:flex-row.items-center.gap-4 .w-full');
+            if (!container) return;
+            const oldSlider = document.getElementById('priceSlider');
+            const newHTML = `
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span>Mínimo: $<span id="minPriceValue">${Math.floor(minPrice)}</span></span>
+                        <span>Máximo: $<span id="maxPriceValue">${Math.floor(maxPrice)}</span></span>
+                    </div>
+                    <div class="flex gap-4">
+                        <input type="range" id="minPriceSlider" min="${minPrice}" max="${maxPrice}" value="${minPrice}" step="1000" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <input type="range" id="maxPriceSlider" min="${minPrice}" max="${maxPrice}" value="${maxPrice}" step="1000" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                </div>
+            `;
+            oldSlider.parentNode.innerHTML = newHTML;
+            const minSlider = document.getElementById('minPriceSlider');
+            const maxSlider = document.getElementById('maxPriceSlider');
+            const minDisplay = document.getElementById('minPriceValue');
+            const maxDisplay = document.getElementById('maxPriceValue');
+            
+            function updateFilters() {
+                currentPriceMin = parseFloat(minSlider.value);
+                currentPriceMax = parseFloat(maxSlider.value);
+                minDisplay.innerText = Math.floor(currentPriceMin);
+                maxDisplay.innerText = Math.floor(currentPriceMax);
+                filterCards();
+            }
+            
+            minSlider.addEventListener('input', function() {
+                if (parseFloat(minSlider.value) > parseFloat(maxSlider.value)) {
+                    minSlider.value = maxSlider.value;
+                }
+                updateFilters();
+            });
+            maxSlider.addEventListener('input', function() {
+                if (parseFloat(maxSlider.value) < parseFloat(minSlider.value)) {
+                    maxSlider.value = minSlider.value;
+                }
+                updateFilters();
+            });
+            
+            resetBtn.addEventListener('click', function() {
+                minSlider.value = minPrice;
+                maxSlider.value = maxPrice;
+                updateFilters();
+                searchInput.value = '';
+                filterCards();
+            });
+        }
+
+        // Función de filtrado combinado
+        function filterCards() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            let hasVisible = false;
+            const cards = document.querySelectorAll('.service-card');
+            
+            cards.forEach(card => {
+                const name = card.dataset.name;
+                const desc = card.dataset.desc;
+                const price = parseFloat(card.dataset.price);
+                const matchesSearch = name.includes(searchTerm) || desc.includes(searchTerm);
+                const matchesPrice = price >= currentPriceMin && price <= currentPriceMax;
+                
+                if (matchesSearch && matchesPrice) {
+                    card.classList.remove('hidden');
+                    hasVisible = true;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+            
+            if (hasVisible) {
+                noResultsDiv.classList.add('hidden');
+                grid.classList.remove('hidden');
+                grid.classList.add('grid');
+            } else {
+                noResultsDiv.classList.remove('hidden');
+                grid.classList.remove('grid');
+                grid.classList.add('hidden');
+            }
+        }
+
+        // Modal de requisitos
+        function openModal(serviceName) {
+            const modal = document.getElementById('serviceModal');
+            const modalTitle = document.getElementById('modalTitle');
+            modalTitle.innerText = serviceName;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('serviceModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+        
+        // Modal de fojas.cl
+        function openFojasModal() {
+            const modal = document.getElementById('fojasModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeFojasModal() {
+            const modal = document.getElementById('fojasModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+        
+        // Cerrar modales al hacer clic fuera
+        window.onclick = function(event) {
+            const modal = document.getElementById('serviceModal');
+            const fojasModal = document.getElementById('fojasModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+            if (event.target === fojasModal) {
+                closeFojasModal();
+            }
+        };
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            initPriceFilter();
+            searchInput.addEventListener('input', filterCards);
+            setTimeout(() => filterCards(), 100);
+        });
+    </script>
     {% else %}
     <div class="text-center py-24">
         <p class="text-gray-500 text-xl">No hay servicios registrados actualmente.</p>
     </div>
     {% endif %}
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('searchInput');
-        const cards = document.querySelectorAll('.service-card');
-        const noResults = document.getElementById('noResults');
-        const grid = document.getElementById('servicesGrid');
-
-        searchInput.addEventListener('input', function(e) {
-            const term = e.target.value.toLowerCase().trim();
-            let hasVisibleCards = false;
-
-            cards.forEach(card => {
-                const name = card.getAttribute('data-name');
-                const desc = card.getAttribute('data-desc');
-
-                // Si el término está en el nombre o la descripción
-                if (name.includes(term) || desc.includes(term)) {
-                    card.classList.remove('hidden');
-                    hasVisibleCards = true;
-                } else {
-                    card.classList.add('hidden');
-                }
-            });
-
-            // Mostrar/Ocultar mensaje de "No hay resultados"
-            if (hasVisibleCards) {
-                noResults.classList.add('hidden');
-                grid.classList.add('grid'); // Asegura que el grid se mantenga
-                grid.classList.remove('hidden');
-            } else {
-                noResults.classList.remove('hidden');
-                grid.classList.remove('grid');
-                grid.classList.add('hidden');
-            }
-        });
-    });
-</script>
 {% endblock %}

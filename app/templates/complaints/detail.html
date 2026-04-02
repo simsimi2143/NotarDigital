@@ -37,6 +37,15 @@
                         <p class="text-sm text-slate-600"><strong class="text-slate-800 block">Teléfono:</strong> {{ complaint.telefono }}</p>
                     </div>
                 </div>
+
+                <!-- Nuevo: Datos del funcionario involucrado -->
+                <div class="md:col-span-2">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Funcionario Involucrado</h3>
+                    <div class="bg-amber-50 p-4 rounded-lg border border-amber-100">
+                        <p class="text-slate-800 font-semibold">{{ complaint.nombre_funcionario or 'No especificado' }}</p>
+                    </div>
+                </div>
+
                 <div class="md:col-span-2 bg-slate-50 p-4 rounded-lg border border-slate-100">
                     <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Descripción de los hechos</h3>
                     <p class="text-slate-700 leading-relaxed italic">"{{ complaint.descripcion }}"</p>

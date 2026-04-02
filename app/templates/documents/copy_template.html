@@ -2,47 +2,65 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Copia Electrónica</title>
+    <title>Copia Electrónica - {{ document.folio }}</title>
     <style>
         body {
-            font-family: Helvetica, Arial, sans-serif;
+            font-family: 'Times New Roman', 'Helvetica', Arial, serif;
             font-size: 12px;
-            color: #111111;
+            color: #1e1e1e;
+            line-height: 1.4;
+            margin: 40px;
         }
-
         .header {
-            border-bottom: 2px solid #1d4ed8;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
+            border-bottom: 3px solid #1e3a8a;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
         }
-
         .title {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: bold;
-            color: #1d4ed8;
+            color: #1e3a8a;
+            letter-spacing: 1px;
         }
-
+        .subtitle {
+            font-size: 12px;
+            color: #4b5563;
+            margin-top: 5px;
+        }
         .section-title {
             font-size: 16px;
             font-weight: bold;
-            margin-top: 20px;
-            margin-bottom: 10px;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            border-left: 4px solid #f59e0b;
+            padding-left: 12px;
+            color: #1e3a8a;
         }
-
         .box {
-            border: 1px solid #cccccc;
-            padding: 10px;
-            margin-bottom: 15px;
+            border: 1px solid #e2e8f0;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #fafafa;
+            border-radius: 8px;
         }
-
         .legal {
-            margin-top: 20px;
+            margin-top: 30px;
             font-size: 10px;
-            color: #444444;
+            color: #6b7280;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
         }
-
         p {
-            margin: 4px 0;
+            margin: 6px 0;
+        }
+        .hash {
+            font-family: monospace;
+            font-size: 10px;
+            word-break: break-all;
+            background-color: #f3f4f6;
+            padding: 8px;
+            border-radius: 6px;
         }
     </style>
 </head>
@@ -50,12 +68,14 @@
 
     <div class="header">
         <div class="title">{{ office.nombre_notaria if office else 'Notaría Digital' }}</div>
-        <p>{{ office.direccion if office else '' }}</p>
-        <p>{{ office.comuna if office else '' }} - {{ office.region if office else '' }}</p>
-        <p>Correo oficial: {{ office.correo_oficial if office else '' }}</p>
+        <div class="subtitle">
+            {{ office.direccion if office else '' }}<br>
+            {{ office.comuna if office else '' }} - {{ office.region if office else '' }}<br>
+            Correo: {{ office.correo_oficial if office else '' }} | Teléfono: {{ office.telefono if office else '' }}
+        </div>
     </div>
 
-    <div class="section-title">Copia Electrónica de Documento</div>
+    <div class="section-title">Copia Electrónica de Documento Notarial</div>
 
     <div class="box">
         <p><strong>Folio:</strong> {{ document.folio }}</p>
@@ -63,19 +83,29 @@
         <p><strong>Tipo de documento:</strong> {{ document.tipo_documento }}</p>
         <p><strong>Solicitante:</strong> {{ document.solicitante_nombre or 'No informado' }}</p>
         <p><strong>RUT solicitante:</strong> {{ document.solicitante_rut or 'No informado' }}</p>
-        <p><strong>Estado:</strong> {{ document.estado }}</p>
-        <p><strong>Proveedor de firma:</strong> {{ document.provider_signature or 'No informado' }}</p>
-        <p><strong>Fecha de firma:</strong> {{ document.signed_at.strftime('%d-%m-%Y %H:%M') if document.signed_at else 'No disponible' }}</p>
+        <p><strong>Estado actual:</strong> {{ document.estado|replace('_', ' ')|title }}</p>
+        <p><strong>Proveedor de firma:</strong> {{ document.provider_signature|upper or 'No informado' }}</p>
+        <p><strong>Fecha de firma:</strong> {{ document.signed_at.strftime('%d de %B de %Y a las %H:%M') if document.signed_at else 'No disponible' }}</p>
     </div>
 
     <div class="box">
         <p><strong>Código de verificación:</strong> {{ document.verification_code }}</p>
-        <p><strong>Hash SHA-256:</strong> {{ document.hash_signed_file }}</p>
+        <p><strong>Hash SHA-256 del documento firmado:</strong></p>
+        <div class="hash">{{ document.hash_signed_file }}</div>
+        <p class="subtitle" style="margin-top: 10px;">* Utilice el código para validar la autenticidad en nuestro portal.</p>
     </div>
 
+    {% if document.contenido_resumen %}
+    <div class="box">
+        <p><strong>Resumen del contenido:</strong></p>
+        <p>{{ document.contenido_resumen|safe }}</p>
+    </div>
+    {% endif %}
+
     <div class="legal">
-        Esta copia electrónica ha sido emitida por la notaría para fines de verificación y consulta.
-        La autenticidad del documento puede validarse mediante el código de verificación indicado.
+        Esta copia electrónica ha sido emitida por la Notaría Digital con validez legal conforme a la Ley N° 19.799 sobre documentos electrónicos.<br>
+        Para verificar la integridad del documento, ingrese al portal de la notaría con el código de verificación adjunto.<br>
+        Documento generado electrónicamente el {{ now.strftime('%d de %B de %Y a las %H:%M') if now else 'fecha actual' }}.
     </div>
 
 </body>

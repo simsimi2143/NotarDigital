@@ -1,80 +1,120 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="bg-white min-h-screen font-sans text-slate-900">
+<style>
+/* Forzar ancho completo y eliminar espacios blancos */
+html, body {
+    overflow-x: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.full-width-container {
+    width: 100vw !important;
+    margin-left: calc(-50vw + 50%) !important;
+    margin-right: calc(-50vw + 50%) !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    max-width: none !important;
+}
+
+.section-full {
+    width: 100% !important;
+    max-width: none !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+}
+
+@media (min-width: 640px) {
+    .section-full {
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important;
+    }
+}
+
+@media (min-width: 1024px) {
+    .section-full {
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+    }
+}
+</style>
+
+<div class="full-width-container bg-white min-h-screen font-sans text-slate-900">
     
-    <section class="relative bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 py-20 lg:py-32 overflow-hidden">
+    <!-- Hero Section (sin cambios) -->
+    <section class="relative bg-gradient-to-br from-indigo-900 via-indigo-800 to-slate-900 py-12 sm:py-16 md:py-20 lg:py-32 overflow-hidden">
         <div class="absolute inset-0 opacity-10">
-            <div class="absolute -top-24 -right-24 w-96 h-96 bg-blue-500 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-emerald-500 rounded-full blur-3xl"></div>
+            <div class="absolute -top-24 -right-24 w-64 sm:w-80 md:w-96 h-64 sm:h-80 md:h-96 bg-amber-500 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-24 -left-24 w-64 sm:w-80 md:w-96 h-64 sm:h-80 md:h-96 bg-amber-600 rounded-full blur-3xl"></div>
         </div>
 
-        <div class="max-w-7xl mx-auto px-6 relative z-10">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="text-white space-y-8">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-400/30 text-blue-300 text-xs font-bold uppercase tracking-widest">
+        <div class="section-full relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                <div class="text-white space-y-6 lg:space-y-8">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-200 text-xs font-bold uppercase tracking-widest">
                         <span class="relative flex h-2 w-2">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
                         </span>
                         Ministro de Fe — Araucanía, Chile
                     </div>
-                    <h1 class="text-5xl lg:text-7xl font-serif font-bold leading-tight">
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-serif font-bold leading-tight">
                         {{ office.nombre_notaria if office else 'Notaría Digital' }}
                     </h1>
-                    <p class="text-xl text-slate-300 max-w-lg leading-relaxed">
+                    <p class="text-base sm:text-lg md:text-xl text-slate-300 leading-relaxed">
                         Excelencia en servicios notariales con soporte tecnológico. Garantizamos la seguridad e integridad de sus actos jurídicos.
                     </p>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="{{ url_for('public.verify_document') }}" class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-900/20 transition-all flex items-center gap-2">
+                    <div class="flex flex-wrap gap-3 sm:gap-4">
+                        <a href="{{ url_for('public.verify_document') }}" class="px-6 sm:px-8 py-3 sm:py-4 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl shadow-lg shadow-amber-900/20 transition-all flex items-center gap-2 text-sm sm:text-base">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             Verificar Documento
                         </a>
-                        <a href="#servicios" class="px-8 py-4 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold rounded-xl border border-white/20 transition-all">
+                        <a href="{{url_for('public.services')}}" class="px-6 sm:px-8 py-3 sm:py-4 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-bold rounded-xl border border-white/20 transition-all text-sm sm:text-base">
                             Explorar Servicios
                         </a>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-3xl p-8 shadow-2xl shadow-black/50 border border-slate-100">
-                    <h3 class="text-slate-900 text-xl font-serif font-bold mb-6 flex items-center gap-3">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                <div class="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-2xl shadow-black/50 border border-slate-100">
+                    <h3 class="text-slate-900 text-lg sm:text-xl font-serif font-bold mb-4 sm:mb-6 flex items-center gap-3">
+                        <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
                         Atención al Público
                     </h3>
                     
-                    <div class="space-y-6">
-                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div class="space-y-4 sm:space-y-6">
+                        <div class="p-3 sm:p-4 bg-slate-50 rounded-xl sm:rounded-2xl border border-slate-100">
                             <p class="text-[10px] uppercase font-bold text-slate-500 tracking-widest mb-1">Oficina Presencial</p>
-                            <p class="text-lg text-slate-950 font-medium leading-snug">{{ office.direccion if office else 'Dirección no configurada' }}</p>
+                            <p class="text-base sm:text-lg text-slate-950 font-medium leading-snug">{{ office.direccion if office else 'Dirección no configurada' }}</p>
                             <p class="text-slate-600 italic text-sm">{{ office.comuna if office else '' }}, {{ office.region if office else '' }}</p>
                         </div>
 
-                        <div class="bg-blue-50/50 rounded-2xl p-6 border border-blue-100">
-                            <h4 class="text-xs uppercase font-black text-blue-900 tracking-widest mb-5 flex items-center gap-2">
-                                <span class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
+                        <div class="bg-amber-50/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-amber-100">
+                            <h4 class="text-xs uppercase font-black text-amber-900 tracking-widest mb-3 sm:mb-5 flex items-center gap-2">
+                                <span class="w-2 h-2 bg-amber-600 rounded-full animate-pulse"></span>
                                 Horario de Protocolo
                             </h4>
                             
-                            <div class="space-y-4">
+                            <div class="space-y-3 sm:space-y-4">
                                 {% if office %}
                                     {% set dias = (office.dias_atencion or 'lunes,martes,miercoles,jueves,viernes').split(',') %}
                                     
-                                    <div class="flex justify-between items-center border-b border-blue-100 pb-2">
+                                    <div class="flex justify-between items-center border-b border-amber-100 pb-2">
                                         <div class="flex flex-col">
                                             <span class="text-slate-700 font-medium text-sm">Horario Mañana</span>
                                             <span class="text-[10px] text-slate-400 uppercase font-bold">Lunes a Viernes</span>
                                         </div>
-                                        <span class="text-slate-950 font-black tracking-tight text-base">
+                                        <span class="text-slate-950 font-black tracking-tight text-sm sm:text-base">
                                             {{ office.turno_manana_inicio or '08:45' }} - {{ office.turno_manana_fin or '13:30' }}
                                         </span>
                                     </div>
 
-                                    <div class="flex justify-between items-center border-b border-blue-100 pb-2">
+                                    <div class="flex justify-between items-center border-b border-amber-100 pb-2">
                                         <div class="flex flex-col">
                                             <span class="text-slate-700 font-medium text-sm">Horario Tarde</span>
                                             <span class="text-[10px] text-slate-400 uppercase font-bold">Lunes a Viernes</span>
                                         </div>
-                                        <span class="text-slate-950 font-black tracking-tight text-base">
+                                        <span class="text-slate-950 font-black tracking-tight text-sm sm:text-base">
                                             {{ office.turno_tarde_inicio or '14:50' }} - {{ office.turno_tarde_fin or '16:30' }}
                                         </span>
                                     </div>
@@ -85,7 +125,7 @@
                                             <span class="text-slate-700 font-medium text-sm">Fin de Semana</span>
                                             <span class="text-[10px] text-slate-400 uppercase font-bold">Sábados de Turno</span>
                                         </div>
-                                        <span class="text-slate-950 font-black tracking-tight text-base">
+                                        <span class="text-slate-950 font-black tracking-tight text-sm sm:text-base">
                                             {{ office.sabado_inicio or '09:30' }} - {{ office.sabado_fin or '14:00' }}
                                         </span>
                                     </div>
@@ -96,12 +136,12 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                        <div class="grid grid-cols-2 gap-3 sm:gap-4">
+                            <div class="p-3 sm:p-4 bg-slate-50 rounded-xl border border-slate-100">
                                 <p class="text-[10px] uppercase font-bold text-slate-400 mb-1">Email</p>
-                                <p class="text-xs text-blue-800 font-bold truncate">{{ office.correo_oficial if office else 'contacto@notaria.cl' }}</p>
+                                <p class="text-xs text-indigo-800 font-bold truncate">{{ office.correo_oficial if office else 'contacto@notaria.cl' }}</p>
                             </div>
-                            <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                            <div class="p-3 sm:p-4 bg-slate-50 rounded-xl border border-slate-100">
                                 <p class="text-[10px] uppercase font-bold text-slate-400 mb-1">Teléfono</p>
                                 <p class="text-xs text-slate-950 font-bold">{{ office.telefono if office else '—' }}</p>
                             </div>
@@ -112,58 +152,62 @@
         </div>
     </section>
 
-    <section id="servicios" class="max-w-7xl mx-auto px-6 py-24">
-        <div class="flex flex-col md:flex-row items-end justify-between mb-16 gap-6 border-b border-slate-100 pb-10">
+    <!-- Servicios Section COMPRIMIDA: solo primeros 3 servicios + botón ver todos -->
+    <section id="servicios" class="section-full py-16 sm:py-20 lg:py-24">
+        <div class="flex flex-col md:flex-row items-end justify-between mb-10 sm:mb-12 lg:mb-16 gap-4 sm:gap-6 border-b border-slate-100 pb-6 sm:pb-8 lg:pb-10">
             <div class="max-w-2xl text-left">
-                <h2 class="text-4xl font-serif font-bold text-slate-950 mb-4 tracking-tight">Servicios y Aranceles</h2>
-                <p class="text-slate-600 text-lg">Listado oficial de actuaciones notariales disponibles bajo normativa vigente.</p>
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-slate-950 mb-3 sm:mb-4 tracking-tight">Servicios y Aranceles</h2>
+                <p class="text-slate-600 text-base sm:text-lg">Listado oficial de actuaciones notariales disponibles bajo normativa vigente.</p>
             </div>
-            <a href="{{ url_for('public.public_complaints') }}" class="inline-flex items-center text-sm font-bold text-rose-800 bg-rose-50 hover:bg-rose-100 px-6 py-3 rounded-xl transition-all border border-rose-100">
-                Canal de Reclamos y Sugerencias
+            <a href="{{ url_for('public.services') }}" class="inline-flex items-center text-xs sm:text-sm font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-4 sm:px-6 py-2 sm:py-3 rounded-xl transition-all border border-indigo-100">
+                Ver todos los servicios
+                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
             </a>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% for service in services %}
-            <div class="group bg-white p-8 rounded-3xl border border-slate-200 hover:border-blue-200 hover:shadow-2xl transition-all flex flex-col h-full">
-                <h4 class="font-serif font-bold text-xl text-slate-950 mb-3 group-hover:text-blue-800 transition-colors">{{ service.nombre }}</h4>
-                <p class="text-slate-500 text-sm mb-8 flex-grow leading-relaxed italic">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+            {% for service in services[:3] %}  <!-- Mostrar solo los primeros 3 -->
+            <div class="group bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 hover:border-indigo-200 hover:shadow-2xl transition-all flex flex-col h-full">
+                <h4 class="font-serif font-bold text-lg sm:text-xl text-slate-950 mb-3 group-hover:text-indigo-800 transition-colors">{{ service.nombre }}</h4>
+                <p class="text-slate-500 text-sm mb-6 sm:mb-8 flex-grow leading-relaxed italic">
                     {{ service.descripcion or 'Consulte requisitos específicos para esta actuación notarial en mesón de atención.' }}
                 </p>
-                <div class="flex items-center justify-between pt-6 border-t border-slate-50">
+                <div class="flex items-center justify-between pt-4 sm:pt-6 border-t border-slate-50">
                     <div class="flex flex-col">
                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tarifa Legal</span>
-                        <span class="text-2xl font-black text-slate-950">${{ "{:,.0f}".format(service.tarifa|float)|replace(',', '.') }}</span>
+                        <span class="text-xl sm:text-2xl font-black text-slate-950">${{ "{:,.0f}".format(service.tarifa|float)|replace(',', '.') }}</span>
                     </div>
                     <span class="px-3 py-1 bg-slate-100 text-slate-500 text-[9px] font-bold rounded-lg border border-slate-200 uppercase">Valor Referencial</span>
                 </div>
             </div>
             {% else %}
-            <div class="col-span-full py-20 text-center bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
-                <p class="text-slate-500 font-serif italic text-lg">Actualizando catálogo de servicios notariales...</p>
+            <div class="col-span-full py-12 sm:py-16 lg:py-20 text-center bg-slate-50 rounded-2xl sm:rounded-3xl border-2 border-dashed border-slate-200">
+                <p class="text-slate-500 font-serif italic text-base sm:text-lg">Actualizando catálogo de servicios notariales...</p>
             </div>
             {% endfor %}
         </div>
     </section>
-    <section class="bg-slate-50 py-24 border-y border-slate-200">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex flex-col lg:flex-row gap-16 items-center">
+    
+    <!-- Compromiso Section (sin cambios) -->
+    <section class="bg-slate-50 py-16 sm:py-20 lg:py-24 border-y border-slate-200">
+        <div class="section-full">
+            <div class="flex flex-col lg:flex-row gap-8 sm:gap-12 lg:gap-16 items-center">
                 <div class="w-full lg:w-1/2">
                     <div class="relative">
-                        <div class="absolute inset-0 bg-blue-600 rounded-3xl rotate-3 scale-95 opacity-10"></div>
-                        <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=800" alt="Notaría" class="rounded-3xl shadow-xl relative z-10 grayscale hover:grayscale-0 transition-all duration-700">
+                        <div class="absolute inset-0 bg-indigo-600 rounded-2xl sm:rounded-3xl rotate-3 scale-95 opacity-10"></div>
+                        <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=800" alt="Notaría" class="rounded-2xl sm:rounded-3xl shadow-xl relative z-10 grayscale hover:grayscale-0 transition-all duration-700 w-full h-auto">
                     </div>
                 </div>
-                <div class="w-full lg:w-1/2 space-y-6">
-                    <h2 class="text-4xl font-serif font-bold text-slate-950 leading-tight">Compromiso con la Fe Pública</h2>
-                    <p class="text-slate-600 text-lg leading-relaxed">
+                <div class="w-full lg:w-1/2 space-y-4 sm:space-y-6">
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-slate-950 leading-tight">Compromiso con la Fe Pública</h2>
+                    <p class="text-slate-600 text-base sm:text-lg leading-relaxed">
                         Como ministros de fe en la región de la **Araucanía**, nuestra misión es facilitar la vida de los ciudadanos mediante procesos transparentes y el uso de firmas electrónicas avanzadas.
                     </p>
-                    <ul class="space-y-4">
+                    <ul class="space-y-3 sm:space-y-4">
                         {% for item in ['Seguridad en Datos Personales', 'Atención Preferencial', 'Aranceles Transparentes'] %}
                         <li class="flex items-center gap-3 font-bold text-slate-800">
                             <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                            {{ item }}
+                            <span class="text-sm sm:text-base">{{ item }}</span>
                         </li>
                         {% endfor %}
                     </ul>
@@ -171,5 +215,254 @@
             </div>
         </div>
     </section>
+
+    <!-- Nuestros Valores (sin cambios) -->
+    <section class="section-full py-16 sm:py-20 bg-white">
+        <div class="text-center mb-12">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-slate-950 mb-4">Nuestros Valores</h2>
+            <p class="text-slate-600 max-w-2xl mx-auto">Ofrecemos un servicio notarial de excelencia, respaldado por tecnología y atención humana.</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+            <div class="text-center p-6 bg-slate-50 rounded-2xl hover:shadow-lg transition">
+                <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-indigo-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"></path></svg>
+                </div>
+                <h3 class="font-bold text-slate-900 text-lg">Acceso Universal</h3>
+                <p class="text-slate-500 text-sm mt-2">Instalaciones adaptadas y atención inclusiva para todos.</p>
+            </div>
+            <div class="text-center p-6 bg-slate-50 rounded-2xl hover:shadow-lg transition">
+                <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-indigo-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                </div>
+                <h3 class="font-bold text-slate-900 text-lg">Equipo Humano</h3>
+                <p class="text-slate-500 text-sm mt-2">Profesionales capacitados para brindar confianza y cercanía.</p>
+            </div>
+            <div class="text-center p-6 bg-slate-50 rounded-2xl hover:shadow-lg transition">
+                <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-indigo-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                </div>
+                <h3 class="font-bold text-slate-900 text-lg">Firma Electrónica Avanzada</h3>
+                <p class="text-slate-500 text-sm mt-2">Documentos con plena validez legal y respaldo tecnológico.</p>
+            </div>
+            <div class="text-center p-6 bg-slate-50 rounded-2xl hover:shadow-lg transition">
+                <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-indigo-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                </div>
+                <h3 class="font-bold text-slate-900 text-lg">Amplios Espacios</h3>
+                <p class="text-slate-500 text-sm mt-2">Instalaciones cómodas para una atención fluida y sin aglomeraciones.</p>
+            </div>
+            <div class="text-center p-6 bg-slate-50 rounded-2xl hover:shadow-lg transition">
+                <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-indigo-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                </div>
+                <h3 class="font-bold text-slate-900 text-lg">Ubicación Céntrica</h3>
+                <p class="text-slate-500 text-sm mt-2">Fácil acceso y cercanía a servicios públicos y comercio.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Carrusel de imágenes (sin cambios) -->
+    <section class="section-full py-16 sm:py-20 bg-slate-50">
+        <div class="text-center mb-12">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-slate-950 mb-4">Nuestras Instalaciones</h2>
+            <p class="text-slate-600 max-w-2xl mx-auto">Conozca la modernidad y calidez de nuestras oficinas.</p>
+        </div>
+        <div class="relative max-w-5xl mx-auto" x-data="{ current: 0 }" x-init="setInterval(() => { current = (current + 1) % 4 }, 5000)">
+            <div class="overflow-hidden rounded-2xl shadow-2xl">
+                <div class="flex transition-transform duration-500 ease-in-out" :style="'transform: translateX(-' + (current * 100) + '%)'">
+                    <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=1200" class="w-full flex-shrink-0 h-64 sm:h-96 object-cover" alt="Oficina notarial">
+                    <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80&w=1200" class="w-full flex-shrink-0 h-64 sm:h-96 object-cover" alt="Atención personalizada">
+                    <img src="https://images.unsplash.com/photo-1568992687947-868a62a9f4c6?auto=format&fit=crop&q=80&w=1200" class="w-full flex-shrink-0 h-64 sm:h-96 object-cover" alt="Sala de espera">
+                    <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&q=80&w=1200" class="w-full flex-shrink-0 h-64 sm:h-96 object-cover" alt="Tecnología notarial">
+                </div>
+            </div>
+            <!-- Botones de navegación -->
+            <button @click="current = (current - 1 + 4) % 4" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-lg">
+                <svg class="w-6 h-6 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            </button>
+            <button @click="current = (current + 1) % 4" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-lg">
+                <svg class="w-6 h-6 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </button>
+            <!-- Indicadores -->
+            <div class="flex justify-center mt-4 space-x-2">
+                <template x-for="i in 4" :key="i">
+                    <button @click="current = i-1" class="w-3 h-3 rounded-full" :class="current === i-1 ? 'bg-indigo-600' : 'bg-gray-300'"></button>
+                </template>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    </section>
+
+    <!-- NUEVA SECCIÓN: MEDIOS DIGITALES (segunda imagen) -->
+    <section class="section-full py-16 sm:py-20 bg-white">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-slate-950 mb-4">Medios Digitales</h2>
+                <p class="text-slate-600">Comunícate con nosotros de forma ágil y segura a través de nuestros canales digitales.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- WhatsApp -->
+                <div class="bg-green-50 rounded-2xl p-6 border border-green-100 hover:shadow-lg transition">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                            <svg class="w-6 h-6 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">Escríbenos por WhatsApp</h3>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Puedes realizar las siguientes consultas:</p>
+                    <ul class="space-y-2 text-gray-700 text-sm mb-6">
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-green-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span>Requisitos para firmar documentos</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-green-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span>Conocer el estado de un trámite</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-green-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span>Agendar Notario en terreno</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-green-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span>Reservar videoconferencia</span>
+                        </li>
+                    </ul>
+                    <div class="bg-green-100/50 rounded-xl p-3 text-center">
+                        <p class="text-sm font-semibold text-green-800">Lunes a Viernes</p>
+                        <p class="text-lg font-bold text-green-900">08:30 a 15:30 horas</p>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <a href="https://wa.me/56931265626" target="_blank" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold px-5 py-2 rounded-xl transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                            </svg>
+                            Iniciar conversación
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Videoconferencia -->
+                <div class="bg-indigo-50 rounded-2xl p-6 border border-indigo-100 hover:shadow-lg transition">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
+                            <svg class="w-6 h-6 text-indigo-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">Videoconferencia</h3>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Servicio especial para:</p>
+                    <ul class="space-y-2 text-gray-700 text-sm mb-6">
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-indigo-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span>Adultos mayores</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-indigo-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span>Personas postradas</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <svg class="w-4 h-4 text-indigo-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span>Movilidad reducida</span>
+                        </li>
+                    </ul>
+                    <div class="bg-indigo-100/50 rounded-xl p-3 text-center">
+                        <p class="text-sm font-semibold text-indigo-800">Lunes a Viernes</p>
+                        <p class="text-lg font-bold text-indigo-900">08:30 a 15:30 horas</p>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-2 rounded-xl transition" onclick="alert('Próximamente podrá agendar su videoconferencia. Consulte por WhatsApp.')">
+                            Solicitar videoconferencia
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de documentos para videoconferencia (opcional) -->
+            <div class="mt-8 text-center">
+                <details class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                    <summary class="cursor-pointer text-sm font-semibold text-indigo-700">📄 Lista de documentos que se pueden realizar por videoconferencia</summary>
+                    <div class="mt-3 text-left text-sm text-gray-600 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <li>Poderes simples y especiales</li>
+                        <li>Testamentos</li>
+                        <li>Compraventas de bienes raíces</li>
+                        <li>Constitución de sociedades</li>
+                        <li>Reconocimiento de firma</li>
+                        <li>Actas de reuniones</li>
+                        <li>Revocaciones de mandato</li>
+                        <li>Declaraciones juradas</li>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enlaces de Interés (sin cambios) -->
+    <section class="section-full py-16 sm:py-20 bg-slate-50">
+        <div class="text-center mb-12">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-slate-950 mb-4">Enlaces de Interés</h2>
+            <p class="text-slate-600">Acceda rápidamente a sitios oficiales y servicios relacionados.</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
+            <a href="https://www.minjusticia.gob.cl/" target="_blank" class="flex items-center justify-center p-4 bg-white rounded-xl hover:bg-indigo-50 transition border border-slate-200 group">
+                <span class="text-slate-700 group-hover:text-indigo-800 font-medium text-center">Ministerio de Justicia y Derechos Humanos</span>
+            </a>
+            <a href="https://www.tgr.cl/" target="_blank" class="flex items-center justify-center p-4 bg-white rounded-xl hover:bg-indigo-50 transition border border-slate-200 group">
+                <span class="text-slate-700 group-hover:text-indigo-800 font-medium text-center">TGR - Tesorería General de la República</span>
+            </a>
+            <a href="https://www.sii.cl/" target="_blank" class="flex items-center justify-center p-4 bg-white rounded-xl hover:bg-indigo-50 transition border border-slate-200 group">
+                <span class="text-slate-700 group-hover:text-indigo-800 font-medium text-center">SII - Servicio de Impuestos Internos</span>
+            </a>
+            <a href="https://www.diariooficial.cl/" target="_blank" class="flex items-center justify-center p-4 bg-white rounded-xl hover:bg-indigo-50 transition border border-slate-200 group">
+                <span class="text-slate-700 group-hover:text-indigo-800 font-medium text-center">Diario Oficial de la República de Chile</span>
+            </a>
+            <a href="https://www.tuempresaenundia.cl/" target="_blank" class="flex items-center justify-center p-4 bg-white rounded-xl hover:bg-indigo-50 transition border border-slate-200 group">
+                <span class="text-slate-700 group-hover:text-indigo-800 font-medium text-center">Tu empresa en un día</span>
+            </a>
+            <a href="https://www.bcn.cl/" target="_blank" class="flex items-center justify-center p-4 bg-white rounded-xl hover:bg-indigo-50 transition border border-slate-200 group">
+                <span class="text-slate-700 group-hover:text-indigo-800 font-medium text-center">Biblioteca del Congreso Nacional / BCN</span>
+            </a>
+            <a href="https://www.conservadores.cl/" target="_blank" class="flex items-center justify-center p-4 bg-white rounded-xl hover:bg-indigo-50 transition border border-slate-200 group">
+                <span class="text-slate-700 group-hover:text-indigo-800 font-medium text-center">Conservadores Digitales</span>
+            </a>
+        </div>
+    </section>
+
 </div>
+{% endblock %}
+
+{% block footer %}
+<footer class="bg-slate-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+                <h3 class="text-lg font-bold mb-4">Ubicación</h3>
+                <div class="w-full h-64 rounded-lg overflow-hidden shadow-lg">
+                    <iframe 
+                        class="w-full h-full"
+                        src="https://maps.google.com/maps?q=Temuco%2C%20Chile&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                        title="Ubicación de la notaría"
+                        frameborder="0"
+                        style="border:0; filter: grayscale(20%);"
+                        allowfullscreen=""
+                        loading="lazy">
+                    </iframe>
+                </div>
+                <p class="mt-4 text-slate-400 text-sm">{{ office.direccion if office else 'Av. Principal 123, Temuco, Región de la Araucanía' }}</p>
+            </div>
+            <div class="flex flex-col justify-between">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Contacto</h3>
+                    <p class="text-slate-400">📞 {{ office.telefono if office else '+56 45 2 123456' }}</p>
+                    <p class="text-slate-400">✉️ {{ office.correo_oficial if office else 'contacto@notariadigital.cl' }}</p>
+                    <p class="text-slate-400 mt-2">Horario de atención: Lunes a Viernes de 08:45 a 13:30 y 14:50 a 16:30</p>
+                </div>
+                <div class="mt-8 pt-8 border-t border-slate-800 text-center">
+                    <p class="text-slate-500 text-sm">© 2025 Notaría Digital - Todos los derechos reservados</p>
+                    <p class="text-slate-500 text-sm mt-2">Página web desarrollada por <span class="text-amber-400 font-medium">Infiweb SpA</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
 {% endblock %}

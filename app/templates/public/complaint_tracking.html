@@ -1,17 +1,97 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1 class="text-2xl font-bold mb-4">Seguimiento de reclamo</h1>
-<form method="GET" class="mb-4">
-    <input type="text" name="folio" placeholder="Ingrese folio" class="border p-2 rounded">
-    <button class="bg-blue-700 text-white px-4 py-2 rounded">Buscar</button>
-</form>
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="text-center mb-8">
+        <h1 class="text-3xl sm:text-4xl font-serif font-bold text-slate-900 mb-3">Seguimiento de reclamo</h1>
+        <p class="text-slate-600">Ingrese el folio que recibió al momento de presentar su reclamo.</p>
+    </div>
 
-{% if complaint %}
-<div class="bg-white p-4 rounded shadow">
-    <p><strong>Folio:</strong> {{ complaint.folio }}</p>
-    <p><strong>Estado:</strong> {{ complaint.estado }}</p>
-    <p><strong>Descripción:</strong> {{ complaint.descripcion }}</p>
-    <p><strong>Respuesta:</strong> {{ complaint.respuesta or 'Sin respuesta aún' }}</p>
+    <div class="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 sm:p-8">
+        <form method="GET" class="flex flex-col sm:flex-row gap-3">
+            <input type="text" name="folio" value="{{ request.args.get('folio', '') }}" 
+                   placeholder="Ej: R-2025-00123"
+                   class="flex-1 border border-slate-300 rounded-xl px-4 py-3 focus:ring-indigo-500 focus:border-indigo-500 transition">
+            <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-xl transition whitespace-nowrap">
+                Buscar reclamo
+            </button>
+        </form>
+
+        {% if complaint %}
+        <div class="mt-8 border-t border-slate-100 pt-6">
+            <div class="bg-indigo-50 rounded-xl p-5 mb-6">
+                <div class="flex flex-wrap justify-between items-center gap-3">
+                    <div>
+                        <p class="text-xs uppercase font-bold text-indigo-700 tracking-wider">Folio</p>
+                        <p class="text-xl font-mono font-bold text-indigo-900">{{ complaint.folio }}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs uppercase font-bold text-indigo-700 tracking-wider">Estado actual</p>
+                        {% set estado_class = {
+                            'recibido': 'bg-blue-100 text-blue-800',
+                            'en_revision': 'bg-amber-100 text-amber-800',
+                            'respondido': 'bg-green-100 text-green-800',
+                            'cerrado': 'bg-slate-100 text-slate-800',
+                            'rechazado': 'bg-red-100 text-red-800'
+                        } %}
+                        <span class="px-3 py-1 rounded-full text-sm font-medium {{ estado_class.get(complaint.estado, 'bg-slate-100 text-slate-800') }}">
+                            {{ complaint.estado|replace('_', ' ')|title }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-5">
+                <div>
+                    <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-1">Datos del reclamante</h3>
+                    <p class="text-slate-800"><span class="font-medium">Nombre:</span> {{ complaint.nombre_reclamante }}</p>
+                    {% if complaint.rut_reclamante %}
+                    <p class="text-slate-800"><span class="font-medium">RUT:</span> {{ complaint.rut_reclamante }}</p>
+                    {% endif %}
+                    {% if complaint.email %}
+                    <p class="text-slate-800"><span class="font-medium">Correo:</span> {{ complaint.email }}</p>
+                    {% endif %}
+                    {% if complaint.telefono %}
+                    <p class="text-slate-800"><span class="font-medium">Teléfono:</span> {{ complaint.telefono }}</p>
+                    {% endif %}
+                </div>
+
+                {% if complaint.nombre_funcionario %}
+                <div>
+                    <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-1">Funcionario involucrado</h3>
+                    <p class="text-slate-800">{{ complaint.nombre_funcionario }}</p>
+                </div>
+                {% endif %}
+
+                <div>
+                    <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-1">Descripción del incidente</h3>
+                    <p class="text-slate-700 whitespace-pre-wrap">{{ complaint.descripcion }}</p>
+                </div>
+
+                <div class="bg-amber-50 rounded-xl p-4 border border-amber-100">
+                    <h3 class="text-sm font-bold text-amber-800 uppercase tracking-wider mb-2">Respuesta de la notaría</h3>
+                    {% if complaint.respuesta %}
+                        <p class="text-slate-700 whitespace-pre-wrap">{{ complaint.respuesta }}</p>
+                        {% if complaint.fecha_respuesta %}
+                        <p class="text-xs text-slate-500 mt-2">Respondido el {{ complaint.fecha_respuesta.strftime('%d/%m/%Y %H:%M') }}</p>
+                        {% endif %}
+                    {% else %}
+                        <p class="text-slate-500 italic">Aún no hay respuesta. El plazo estimado es de 72 horas hábiles desde la recepción.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mt-6 text-sm text-slate-500 border-t border-slate-100 pt-4">
+                <p>Fecha de ingreso: {{ complaint.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</p>
+                <p class="mt-1">Si tiene dudas, puede contactarnos al correo {{ office.correo_oficial if office else 'contacto@notaria.cl' }} con su folio.</p>
+            </div>
+        </div>
+        {% elif request.args.get('folio') %}
+        <div class="mt-8 text-center p-6 bg-red-50 rounded-xl border border-red-100">
+            <svg class="w-12 h-12 text-red-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <p class="text-red-700 font-medium">No se encontró ningún reclamo con el folio ingresado.</p>
+            <p class="text-sm text-red-600 mt-1">Verifique que el folio sea correcto.</p>
+        </div>
+        {% endif %}
+    </div>
 </div>
-{% endif %}
 {% endblock %}

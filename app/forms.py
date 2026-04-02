@@ -36,14 +36,17 @@ class SignedUploadForm(FlaskForm):
     signed_file = FileField("Documento firmado", validators=[DataRequired()])
     submit = SubmitField("Subir firmado")
 
+# forms.py (fragmento)
 class ComplaintForm(FlaskForm):
     nombre_reclamante = StringField("Nombre", validators=[DataRequired()])
     rut_reclamante = StringField("RUT", validators=[Optional()])
     email = StringField("Correo", validators=[Optional(), Email()])
     telefono = StringField("Teléfono", validators=[Optional()])
+    nombre_funcionario = StringField("Nombre del funcionario", validators=[DataRequired()])  # <--- NUEVO
     descripcion = TextAreaField("Descripción", validators=[DataRequired()])
     adjunto = FileField("Adjunto", validators=[Optional()])
     submit = SubmitField("Enviar reclamo")
+    
     def validate_rut_reclamante(self, field):
         if field.data and not validate_rut(field.data):
             raise ValidationError("RUT inválido")

@@ -1,16 +1,188 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="bg-white p-6 rounded shadow max-w-2xl">
-    <h1 class="text-2xl font-bold mb-4">Ingreso de reclamo</h1>
-    <form method="POST" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
-        <div class="mb-3">{{ form.nombre_reclamante.label }} {{ form.nombre_reclamante(class="w-full border p-2 rounded") }}</div>
-        <div class="mb-3">{{ form.rut_reclamante.label }} {{ form.rut_reclamante(class="w-full border p-2 rounded") }}</div>
-        <div class="mb-3">{{ form.email.label }} {{ form.email(class="w-full border p-2 rounded") }}</div>
-        <div class="mb-3">{{ form.telefono.label }} {{ form.telefono(class="w-full border p-2 rounded") }}</div>
-        <div class="mb-3">{{ form.descripcion.label }} {{ form.descripcion(class="w-full border p-2 rounded") }}</div>
-        <div class="mb-3">{{ form.adjunto.label }} {{ form.adjunto(class="w-full") }}</div>
-        {{ form.submit(class="bg-blue-700 text-white px-4 py-2 rounded") }}
-    </form>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <!-- Encabezado -->
+    <div class="text-center mb-10">
+        <h1 class="text-3xl sm:text-4xl font-serif font-bold text-slate-900 mb-3">Ingreso de Reclamo</h1>
+        <p class="text-slate-600 max-w-2xl mx-auto">Utilice este formulario para presentar una queja formal contra un funcionario de nuestra notaría.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Columna izquierda: instrucciones + buscador rápido -->
+        <div class="lg:col-span-1">
+            <div class="bg-indigo-50 rounded-2xl p-6 border border-indigo-100 sticky top-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <h2 class="text-xl font-bold text-indigo-900">¿Cómo funciona?</h2>
+                </div>
+                <ul class="space-y-3 text-slate-700 text-sm mb-6">
+                    <li class="flex gap-2">
+                        <span class="font-bold text-indigo-600">1.</span>
+                        <span>Ingrese los datos solicitados, incluyendo el nombre del funcionario involucrado.</span>
+                    </li>
+                    <li class="flex gap-2">
+                        <span class="font-bold text-indigo-600">2.</span>
+                        <span>Describa detalladamente el incidente (fecha, lugar, lo ocurrido).</span>
+                    </li>
+                    <li class="flex gap-2">
+                        <span class="font-bold text-indigo-600">3.</span>
+                        <span>El reclamo será revisado por el área de fiscalización en un plazo máximo de <strong>72 horas hábiles</strong>.</span>
+                    </li>
+                    <li class="flex gap-2">
+                        <span class="font-bold text-indigo-600">4.</span>
+                        <span>Si se comprueban los hechos, el funcionario será registrado en la <strong>lista de sancionados</strong> y se tomarán las medidas correspondientes.</span>
+                    </li>
+                </ul>
+                <button onclick="openModal()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-xl transition flex items-center justify-center gap-2 mb-6">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Ver instrucciones completas
+                </button>
+
+                <!-- Nuevo: Buscador rápido de seguimiento -->
+                <div class="border-t border-indigo-200 pt-5 mt-2">
+                    <h3 class="text-sm font-bold text-indigo-800 uppercase tracking-wider mb-3">¿Ya presentaste un reclamo?</h3>
+                    <form action="{{ url_for('public.complaint_tracking') }}" method="GET" class="flex flex-col gap-3">
+                        <input type="text" name="folio" placeholder="Ingresa tu folio (ej: R-2026-000001)" 
+                               class="w-full border border-indigo-200 rounded-xl px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                        <button type="submit" class="bg-white hover:bg-indigo-100 text-indigo-700 font-medium border border-indigo-200 px-4 py-2 rounded-xl transition flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            Ver seguimiento
+                        </button>
+                    </form>
+                    <p class="text-xs text-indigo-600 mt-2">* Puedes consultar el estado de tu reclamo en cualquier momento.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna derecha: formulario (sin cambios) -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 sm:p-8">
+                <form method="POST" enctype="multipart/form-data" class="space-y-5">
+                    {{ form.hidden_tag() }}
+                    
+                    <!-- Información del reclamante -->
+                    <div class="border-b border-slate-100 pb-4 mb-4">
+                        <h3 class="text-lg font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                            Datos del reclamante
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                {{ form.nombre_reclamante.label(class="block text-sm font-medium text-slate-700 mb-1") }}
+                                {{ form.nombre_reclamante(class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 transition") }}
+                            </div>
+                            <div>
+                                {{ form.rut_reclamante.label(class="block text-sm font-medium text-slate-700 mb-1") }}
+                                {{ form.rut_reclamante(class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 transition") }}
+                            </div>
+                            <div>
+                                {{ form.email.label(class="block text-sm font-medium text-slate-700 mb-1") }}
+                                {{ form.email(class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 transition") }}
+                            </div>
+                            <div>
+                                {{ form.telefono.label(class="block text-sm font-medium text-slate-700 mb-1") }}
+                                {{ form.telefono(class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 transition") }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Datos del funcionario -->
+                    <div class="border-b border-slate-100 pb-4 mb-4">
+                        <h3 class="text-lg font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            Funcionario involucrado
+                        </h3>
+                        <div>
+                            {{ form.nombre_funcionario.label(class="block text-sm font-medium text-slate-700 mb-1") }}
+                            {{ form.nombre_funcionario(class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 transition", placeholder="Ej: Juan Pérez") }}
+                            <p class="text-xs text-slate-500 mt-1">Indique el nombre del funcionario que lo atendió o al cual desea querellar.</p>
+                        </div>
+                    </div>
+
+                    <!-- Detalle del reclamo -->
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-3 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            Detalle del incidente
+                        </h3>
+                        <div class="space-y-4">
+                            <div>
+                                {{ form.descripcion.label(class="block text-sm font-medium text-slate-700 mb-1") }}
+                                {{ form.descripcion(class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 transition", rows="5", placeholder="Describa detalladamente lo sucedido (fecha, hora, lugar, lo ocurrido)...") }}
+                            </div>
+                            <div>
+                                {{ form.adjunto.label(class="block text-sm font-medium text-slate-700 mb-1") }}
+                                {{ form.adjunto(class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100") }}
+                                <p class="text-xs text-slate-500 mt-1">Puede adjuntar documentos (máx. 5MB) como evidencia.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end pt-4">
+                        {{ form.submit(class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-3 rounded-xl transition shadow-md") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- Modal con instrucciones completas (sin cambios) -->
+<div id="instructionsModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4 transition-all">
+    <div class="bg-white rounded-2xl max-w-2xl w-full shadow-2xl transform transition-all">
+        <div class="flex justify-between items-center p-6 border-b border-slate-100">
+            <h3 class="text-xl font-bold text-indigo-900 flex items-center gap-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Instrucciones para presentar un reclamo
+            </h3>
+            <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <div class="p-6 space-y-4 text-slate-700">
+            <p class="font-bold text-indigo-800">¿Cómo funciona el proceso de reclamos?</p>
+            <ol class="list-decimal list-inside space-y-3 pl-2">
+                <li><strong>Ingrese sus datos</strong>: nombre completo, RUT, correo electrónico y teléfono de contacto.</li>
+                <li><strong>Identifique al funcionario</strong>: debe indicar el nombre del funcionario involucrado en el incidente.</li>
+                <li><strong>Describa el incidente</strong>: detalle lo más posible lo ocurrido (fecha, hora, lugar, contexto, testigos si los hay).</li>
+                <li><strong>Adjunte evidencia</strong>: si tiene documentos, fotografías o correos que respalden su reclamo, puede adjuntarlos.</li>
+                <li><strong>Envíe el formulario</strong> y recibirá un correo de confirmación.</li>
+                <li><strong>Plazo de respuesta</strong>: el equipo de fiscalización analizará su caso en un plazo máximo de <strong>72 horas hábiles</strong>.</li>
+                <li><strong>Resultado</strong>: si el reclamo es verificado, el funcionario será registrado en la <strong>lista de sancionados</strong> visible en nuestro sitio web, y se le notificará la resolución.</li>
+            </ol>
+            <div class="bg-amber-50 p-4 rounded-xl border border-amber-100 mt-4">
+                <p class="text-sm text-amber-800 flex gap-2 items-start">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span><strong>Importante:</strong> Los reclamos falsos o maliciosos serán derivados a las autoridades correspondientes. La notaría se reserva el derecho de rechazar reclamos sin fundamento.</span>
+                </p>
+            </div>
+        </div>
+        <div class="p-6 border-t border-slate-100 flex justify-end">
+            <button onclick="closeModal()" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl transition font-medium">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal() {
+        const modal = document.getElementById('instructionsModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal() {
+        const modal = document.getElementById('instructionsModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = '';
+    }
+    
+    window.onclick = function(event) {
+        const modal = document.getElementById('instructionsModal');
+        if (event.target === modal) {
+            closeModal();
+        }
+    };
+</script>
 {% endblock %}

@@ -1,8 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="bg-white p-6 rounded shadow">
-    <h1 class="text-2xl font-bold mb-2">Reclamo ingresado correctamente</h1>
-    <p>Su folio de seguimiento es: <strong>{{ folio }}</strong></p>
-    <a href="{{ url_for('public.complaint_tracking', folio=folio) }}" class="text-blue-700">Ver seguimiento</a>
+<div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 text-center">
+        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </div>
+        <h1 class="text-3xl font-serif font-bold text-slate-900 mb-3">Reclamo ingresado correctamente</h1>
+        <p class="text-slate-600 mb-4">Su reclamo ha sido recibido y será revisado por nuestro equipo de fiscalización.</p>
+        
+        <div class="bg-indigo-50 rounded-xl p-4 mb-6 inline-block mx-auto">
+            <p class="text-sm text-slate-600">Folio de seguimiento:</p>
+            <p class="text-2xl font-mono font-bold text-indigo-800">{{ folio }}</p>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="{{ url_for('public.complaint_tracking', folio=folio) }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-xl transition inline-flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                Ver seguimiento
+            </a>
+            <a href="{{ url_for('public.home') }}" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-medium px-6 py-3 rounded-xl transition">
+                Volver al inicio
+            </a>
+        </div>
+        
+        <div class="mt-8 pt-6 border-t border-slate-100 text-sm text-slate-500">
+            <p>El plazo estimado de respuesta es de <strong class="text-amber-600">72 horas hábiles</strong>. Si el reclamo es verificado, el funcionario será registrado en la <a href="{{ url_for('public.public_sanctions') }}" class="text-indigo-600 hover:underline">lista de sancionados</a>.</p>
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -106,6 +106,7 @@ class Document(db.Model):
     fecha_envio_firma = db.Column(db.DateTime)
     observacion_firma = db.Column(db.Text)
 
+# models.py (fragmento)
 class Complaint(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     folio = db.Column(db.String(50), unique=True, nullable=False)
@@ -113,6 +114,7 @@ class Complaint(db.Model):
     rut_reclamante = db.Column(db.String(20))
     email = db.Column(db.String(120))
     telefono = db.Column(db.String(50))
+    nombre_funcionario = db.Column(db.String(150))  # <--- NUEVO CAMPO
     descripcion = db.Column(db.Text, nullable=False)
     adjunto_path = db.Column(db.String(255))
     estado = db.Column(db.String(50), default="recibido")

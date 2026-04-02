@@ -1,16 +1,56 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="bg-white p-6 rounded shadow max-w-2xl">
-    <h1 class="text-2xl font-bold mb-4">Nuevo documento</h1>
-    <form method="POST" action="{{ url_for('documents.new_document') }}" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
-        <div class="mb-3">{{ form.tipo_documento.label }} {{ form.tipo_documento(class="w-full border p-2 rounded") }}</div>
-        <div class="mb-3">{{ form.titulo.label }} {{ form.titulo(class="w-full border p-2 rounded") }}</div>
-        <div class="mb-3">{{ form.solicitante_nombre.label }} {{ form.solicitante_nombre(class="w-full border p-2 rounded") }}</div>
-        <div class="mb-3">{{ form.solicitante_rut.label }} {{ form.solicitante_rut(class="w-full border p-2 rounded") }}</div>
-        <div class="mb-3">{{ form.contenido_resumen.label }} {{ form.contenido_resumen(class="w-full border p-2 rounded") }}</div>
-        <div class="mb-3">{{ form.original_file.label }} {{ form.original_file(class="w-full") }}</div>
-        {{ form.submit(class="bg-blue-700 text-white px-4 py-2 rounded") }}
-    </form>
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 sm:p-8">
+        <div class="border-b border-slate-100 pb-4 mb-6">
+            <h1 class="text-2xl font-serif font-bold text-slate-900">Nuevo documento</h1>
+            <p class="text-slate-500 text-sm mt-1">Complete los datos del documento para iniciar el trámite.</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('documents.new_document') }}" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+
+            <div class="mb-4">
+                {{ form.tipo_documento.label(class="block text-sm font-medium text-slate-700 mb-1") }}
+                {{ form.tipo_documento(class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 transition") }}
+            </div>
+
+            <div class="mb-4">
+                {{ form.titulo.label(class="block text-sm font-medium text-slate-700 mb-1") }}
+                {{ form.titulo(class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 transition") }}
+            </div>
+
+            <div class="mb-4">
+                {{ form.solicitante_nombre.label(class="block text-sm font-medium text-slate-700 mb-1") }}
+                {{ form.solicitante_nombre(class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 transition") }}
+            </div>
+
+            <div class="mb-4">
+                {{ form.solicitante_rut.label(class="block text-sm font-medium text-slate-700 mb-1") }}
+                {{ form.solicitante_rut(class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 transition") }}
+                {% for error in form.solicitante_rut.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="mb-4">
+                {{ form.contenido_resumen.label(class="block text-sm font-medium text-slate-700 mb-1") }}
+                {{ form.contenido_resumen(class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:ring-indigo-500 focus:border-indigo-500 transition", rows="4") }}
+            </div>
+
+            <div class="mb-6">
+                {{ form.original_file.label(class="block text-sm font-medium text-slate-700 mb-1") }}
+                {{ form.original_file(class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100") }}
+                <p class="text-xs text-slate-500 mt-1">Documento original a ser tramitado (PDF, DOC, etc.)</p>
+            </div>
+
+            <div class="flex gap-3">
+                {{ form.submit(class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-2 rounded-xl transition") }}
+                <a href="{{ url_for('documents.list_documents') }}" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-medium px-6 py-2 rounded-xl transition">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}

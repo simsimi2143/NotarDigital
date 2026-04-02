@@ -75,6 +75,20 @@ class Service(db.Model):
     descripcion = db.Column(db.Text)
     tarifa = db.Column(db.Integer, nullable=False)
     activo = db.Column(db.Boolean, default=True)
+    category_id = db.Column(db.Integer, db.ForeignKey('service_category.id'), nullable=True)
+
+class ServiceCategory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False, unique=True)
+    descripcion = db.Column(db.Text)
+    activo = db.Column(db.Boolean, default=True)
+    orden = db.Column(db.Integer, default=0)  # para ordenar en la vista pública
+
+    # Relación con servicios
+    servicios = db.relationship('Service', backref='categoria', lazy=True)
+
+    def __repr__(self):
+        return f'<ServiceCategory {self.nombre}>'
 
 class Document(db.Model):
     id = db.Column(db.Integer, primary_key=True)

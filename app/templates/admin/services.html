@@ -32,48 +32,34 @@
     </div>
 
     <div class="bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden">
-        <table class="min-w-full divide-y divide-slate-200" id="servicesTable">
-            <thead class="bg-slate-50">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
                 <tr>
-                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Nombre del Trámite</th>
-                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Arancel/Tarifa</th>
-                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Estado</th>
-                    <th class="px-6 py-4 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider">Acciones</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nombre</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Categoría</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tarifa</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estado</th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Acciones</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100 bg-white">
+            <tbody class="divide-y divide-gray-200">
                 {% for item in items %}
-                <tr class="service-row hover:bg-slate-50 transition-colors">
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-medium text-slate-800 service-name">{{ item.nombre }}</div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-slate-600 font-mono bg-slate-100 inline-block px-2 py-1 rounded border border-slate-200">
-                            ${{ "{:,.0f}".format(item.tarifa) }}
-                        </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
+                <tr>
+                    <td class="px-6 py-4">{{ item.nombre }}</td>
+                    <td class="px-6 py-4">{{ categories.get(item.category_id, 'Sin categoría') }}</td>
+                    <td class="px-6 py-4">${{ "{:,.0f}".format(item.tarifa).replace(',', '.') }}</td>
+                    <td class="px-6 py-4">
                         {% if item.activo %}
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">Activo</span>
+                        <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Activo</span>
                         {% else %}
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-rose-100 text-rose-800">Inactivo</span>
+                        <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">Inactivo</span>
                         {% endif %}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                        {% if current_user.rol in ['admin', 'notario'] %}
-                        <a href="{{ url_for('admin.edit_service', id=item.id) }}" 
-                           class="inline-flex items-center text-slate-600 hover:text-indigo-600 bg-slate-50 hover:bg-indigo-50 border border-slate-200 px-4 py-2 rounded-md transition duration-200">
-                            Editar
-                        </a>
-                        {% endif %}
+                    <td class="px-6 py-4 text-right space-x-2">
+                        <a href="{{ url_for('admin.edit_service', id=item.id) }}" class="text-indigo-600 hover:text-indigo-900">Editar</a>
                     </td>
                 </tr>
                 {% endfor %}
-                <tr id="noResults" class="hidden">
-                    <td colspan="4" class="px-6 py-12 text-center text-slate-400 italic">
-                        No se encontraron servicios que coincidan con la búsqueda.
-                    </td>
-                </tr>
             </tbody>
         </table>
     </div>

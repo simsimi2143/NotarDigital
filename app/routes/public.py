@@ -17,8 +17,8 @@ def home():
 
 @public_bp.route("/servicios")
 def services():
-    # Obtenemos todos los servicios activos de una vez
-    services_list = Service.query.filter_by(activo=True).all()
+    # Obtenemos todos los servicios activos con eager loading de la categoría
+    services_list = Service.query.filter_by(activo=True).options(db.joinedload(Service.categoria)).all()
     return render_template("public/services.html", services=services_list)
 
 @public_bp.route("/sanciones")
@@ -31,21 +31,19 @@ def public_sanctions():
 def public_complaints():
     form = ComplaintForm()
     if form.validate_on_submit():
-        folio = generate_folio('R', Complaint)   # CORREGIDO: con argumentos
+        folio = generate_folio('R', Complaint)
         
-        # Guardar archivo adjunto si existe
         adjunto_path = None
         if form.adjunto.data:
             adjunto_path = save_file(form.adjunto.data, folder='complaints')
         
-        # Crear el reclamo
         complaint = Complaint(
             folio=folio,
             nombre_reclamante=form.nombre_reclamante.data,
             rut_reclamante=form.rut_reclamante.data,
             email=form.email.data,
             telefono=form.telefono.data,
-            nombre_funcionario=form.nombre_funcionario.data,  # nuevo campo
+            nombre_funcionario=form.nombre_funcionario.data,
             descripcion=form.descripcion.data,
             adjunto_path=adjunto_path
         )
@@ -53,7 +51,6 @@ def public_complaints():
         db.session.add(complaint)
         db.session.commit()
         
-        # Registrar en auditoría (opcional)
         log_action(current_user.id if current_user.is_authenticated else None, 
                    "complaints", "create", f"Reclamo {folio}")
         

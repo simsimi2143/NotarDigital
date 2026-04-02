@@ -5,14 +5,14 @@
 
     <header class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-            <h1 class="text-3xl font-extrabold text-blue-950 tracking-tight">Gestión Notarial</h1>
+            <h1 class="text-3xl font-extrabold text-indigo-900 tracking-tight">Gestión Notarial</h1>
             <p class="text-slate-500 text-sm">Bienvenido al panel de control operativo.</p>
         </div>
         <div class="flex gap-2">
             <button onclick="window.print()" class="p-2.5 bg-white border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors shadow-sm">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
             </button>
-            <a href="{{ url_for('documents.list_documents') }}" class="inline-flex items-center px-5 py-2.5 bg-blue-900 text-white text-sm font-semibold rounded-lg shadow-sm hover:bg-blue-800 transition-colors gap-2">
+            <a href="{{ url_for('documents.list_documents') }}" class="inline-flex items-center px-5 py-2.5 bg-indigo-600 text-white text-sm font-semibold rounded-lg shadow-sm hover:bg-indigo-700 transition-colors gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                 Nuevo Documento
             </a>
@@ -22,67 +22,78 @@
     <section class="mb-10">
         <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
             <!-- Documentos -->
-            <a href="{{ url_for('documents.list_documents') }}" class="group flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-blue-900 hover:border-blue-900 transition-all duration-200 shadow-sm">
-                <span class="text-blue-900 group-hover:text-white mb-2 transition-colors">
+            <a href="{{ url_for('documents.list_documents') }}" class="group flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-indigo-600 hover:border-indigo-600 transition-all duration-200 shadow-sm">
+                <span class="text-indigo-600 group-hover:text-white mb-2 transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                 </span>
-                <span class="text-[11px] font-bold uppercase tracking-tight text-slate-600 group-hover:text-blue-50">Documentos</span>
+                <span class="text-[11px] font-bold uppercase tracking-tight text-slate-600 group-hover:text-indigo-50">Documentos</span>
             </a>
             <!-- Servicios -->
-            <a href="{{ url_for('admin.services') }}" class="group flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-blue-900 hover:border-blue-900 transition-all duration-200 shadow-sm">
-                <span class="text-blue-900 group-hover:text-white mb-2 transition-colors">
+            <a href="{{ url_for('admin.services') }}" class="group flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-indigo-600 hover:border-indigo-600 transition-all duration-200 shadow-sm">
+                <span class="text-indigo-600 group-hover:text-white mb-2 transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                 </span>
-                <span class="text-[11px] font-bold uppercase tracking-tight text-slate-600 group-hover:text-blue-50">Servicios</span>
+                <span class="text-[11px] font-bold uppercase tracking-tight text-slate-600 group-hover:text-indigo-50">Servicios</span>
             </a>
             <!-- Reclamos -->
-            <a href="{{ url_for('complaints.list_complaints') }}" class="group flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-blue-900 hover:border-blue-900 transition-all duration-200 shadow-sm">
-                <span class="text-blue-900 group-hover:text-white mb-2 transition-colors">
+            <a href="{{ url_for('complaints.list_complaints') }}" class="group flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-indigo-600 hover:border-indigo-600 transition-all duration-200 shadow-sm">
+                <span class="text-indigo-600 group-hover:text-white mb-2 transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                 </span>
-                <span class="text-[11px] font-bold uppercase tracking-tight text-slate-600 group-hover:text-blue-50">Reclamos</span>
+                <span class="text-[11px] font-bold uppercase tracking-tight text-slate-600 group-hover:text-indigo-50">Reclamos</span>
             </a>
             <!-- Sanciones -->
-            <a href="{{ url_for('sanctions.list_sanctions') }}" class="group flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-blue-900 hover:border-blue-900 transition-all duration-200 shadow-sm">
-                <span class="text-blue-900 group-hover:text-white mb-2 transition-colors">
+            <a href="{{ url_for('sanctions.list_sanctions') }}" class="group flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-indigo-600 hover:border-indigo-600 transition-all duration-200 shadow-sm">
+                <span class="text-indigo-600 group-hover:text-white mb-2 transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </span>
-                <span class="text-[11px] font-bold uppercase tracking-tight text-slate-600 group-hover:text-blue-50">Sanciones</span>
+                <span class="text-[11px] font-bold uppercase tracking-tight text-slate-600 group-hover:text-indigo-50">Sanciones</span>
             </a>
             <!-- Personal: solo admin -->
             {% if current_user.rol == 'admin' %}
-            <a href="{{ url_for('admin.list_users') }}" class="group flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-blue-900 hover:border-blue-900 transition-all duration-200 shadow-sm">
-                <span class="text-blue-900 group-hover:text-white mb-2 transition-colors">
+            <a href="{{ url_for('admin.list_users') }}" class="group flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-indigo-600 hover:border-indigo-600 transition-all duration-200 shadow-sm">
+                <span class="text-indigo-600 group-hover:text-white mb-2 transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                 </span>
-                <span class="text-[11px] font-bold uppercase tracking-tight text-slate-600 group-hover:text-blue-50">Personal</span>
+                <span class="text-[11px] font-bold uppercase tracking-tight text-slate-600 group-hover:text-indigo-50">Personal</span>
             </a>
             {% endif %}
             <!-- Auditoría: solo admin/notario -->
             {% if current_user.rol in ['admin', 'notario'] %}
-            <a href="{{ url_for('audits.list_audits') }}" class="group flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-blue-900 hover:border-blue-900 transition-all duration-200 shadow-sm">
-                <span class="text-blue-900 group-hover:text-white mb-2 transition-colors">
+            <a href="{{ url_for('audits.list_audits') }}" class="group flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-indigo-600 hover:border-indigo-600 transition-all duration-200 shadow-sm">
+                <span class="text-indigo-600 group-hover:text-white mb-2 transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
                 </span>
-                <span class="text-[11px] font-bold uppercase tracking-tight text-slate-600 group-hover:text-blue-50">Auditoría</span>
+                <span class="text-[11px] font-bold uppercase tracking-tight text-slate-600 group-hover:text-indigo-50">Auditoría</span>
             </a>
             {% endif %}
             <!-- Backups: solo admin/notario -->
             {% if current_user.rol in ['admin', 'notario'] %}
-            <a href="{{ url_for('backups.list_backups') }}" class="group flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-blue-900 hover:border-blue-900 transition-all duration-200 shadow-sm">
-                <span class="text-blue-900 group-hover:text-white mb-2 transition-colors">
+            <a href="{{ url_for('backups.list_backups') }}" class="group flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-indigo-600 hover:border-indigo-600 transition-all duration-200 shadow-sm">
+                <span class="text-indigo-600 group-hover:text-white mb-2 transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.58 4 8 4s8-1.79 8-4M4 7c0-2.21 3.58-4 8-4s8 1.79 8 4m0 5c0 2.21-3.58 4-8 4s-8-1.79-8-4"></path></svg>
                 </span>
-                <span class="text-[11px] font-bold uppercase tracking-tight text-slate-600 group-hover:text-blue-50">Backups</span>
+                <span class="text-[11px] font-bold uppercase tracking-tight text-slate-600 group-hover:text-indigo-50">Backups</span>
             </a>
             {% endif %}
             <!-- Ajustes: solo admin/notario -->
             {% if current_user.rol in ['admin', 'notario'] %}
-            <a href="{{ url_for('admin.office_config') }}" class="group flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-blue-900 hover:border-blue-900 transition-all duration-200 shadow-sm">
-                <span class="text-blue-900 group-hover:text-white mb-2 transition-colors">
+            <a href="{{ url_for('admin.office_config') }}" class="group flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-indigo-600 hover:border-indigo-600 transition-all duration-200 shadow-sm">
+                <span class="text-indigo-600 group-hover:text-white mb-2 transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path></svg>
                 </span>
-                <span class="text-[11px] font-bold uppercase tracking-tight text-slate-600 group-hover:text-blue-50">Ajustes</span>
+                <span class="text-[11px] font-bold uppercase tracking-tight text-slate-600 group-hover:text-indigo-50">Ajustes</span>
+            </a>
+            {% endif %}
+            <!-- Categorías: solo admin y notario -->
+            {% if current_user.rol in ['admin', 'notario'] %}
+            <a href="{{ url_for('admin.list_categories') }}" class="group flex flex-col items-center justify-center p-4 bg-white border border-slate-200 rounded-xl hover:bg-indigo-600 hover:border-indigo-600 transition-all duration-200 shadow-sm">
+                <span class="text-indigo-600 group-hover:text-white mb-2 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                    </svg>
+                </span>
+                <span class="text-[11px] font-bold uppercase tracking-tight text-slate-600 group-hover:text-indigo-50">Categorías</span>
             </a>
             {% endif %}
         </div>
@@ -91,36 +102,36 @@
     <section class="mb-10">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             <div class="bg-white px-5 py-4 rounded-xl border border-slate-200 flex items-center gap-4 shadow-sm">
-                <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600">
+                <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 11h.01M7 15h.01M13 7h.01M13 11h.01M13 15h.01M17 7h.01M17 11h.01M17 15h.01"></path></svg>
                 </div>
                 <div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Documentos</p>
-                    <p class="text-xl font-black text-blue-950">{{ stats.total_docs }}</p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Cantidad de Documentos Registrados</p>
+                    <p class="text-xl font-black text-indigo-900">{{ stats.total_docs }}</p>
                 </div>
             </div>
             <div class="bg-white px-5 py-4 rounded-xl border border-slate-200 flex items-center gap-4 shadow-sm border-l-4 border-l-emerald-500">
                 <div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Firmados</p>
-                    <p class="text-xl font-black text-blue-950">{{ stats.docs_firmados }}</p>
-                </div>
-            </div>
-            <div class="bg-white px-5 py-4 rounded-xl border border-slate-200 flex items-center gap-4 shadow-sm border-l-4 border-l-red-500">
-                <div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Pendientes</p>
-                    <p class="text-xl font-black text-blue-950">{{ stats.reclamos_pendientes }}</p>
-                </div>
-            </div>
-            <div class="bg-white px-5 py-4 rounded-xl border border-slate-200 flex items-center gap-4 shadow-sm">
-                <div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Personal</p>
-                    <p class="text-xl font-black text-blue-950">{{ stats.usuarios_activos }}</p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Documentos Firmados</p>
+                    <p class="text-xl font-black text-indigo-900">{{ stats.docs_firmados }}</p>
                 </div>
             </div>
             <div class="bg-white px-5 py-4 rounded-xl border border-slate-200 flex items-center gap-4 shadow-sm border-l-4 border-l-amber-500">
                 <div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Sanciones</p>
-                    <p class="text-xl font-black text-blue-950">{{ stats.sanciones_vigentes }}</p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Reclamos Pendientes a Revisar</p>
+                    <p class="text-xl font-black text-indigo-900">{{ stats.reclamos_pendientes }}</p>
+                </div>
+            </div>
+            <div class="bg-white px-5 py-4 rounded-xl border border-slate-200 flex items-center gap-4 shadow-sm">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Miembors del Personal</p>
+                    <p class="text-xl font-black text-indigo-900">{{ stats.usuarios_activos }}</p>
+                </div>
+            </div>
+            <div class="bg-white px-5 py-4 rounded-xl border border-slate-200 flex items-center gap-4 shadow-sm border-l-4 border-l-red-500">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Numero de Sanciones</p>
+                    <p class="text-xl font-black text-indigo-900">{{ stats.sanciones_vigentes }}</p>
                 </div>
             </div>
         </div>
@@ -131,7 +142,7 @@
         <div class="xl:col-span-2 space-y-8">
             
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                <h3 class="text-lg font-bold text-blue-950 mb-6 flex items-center gap-2.5">
+                <h3 class="text-lg font-bold text-indigo-900 mb-6 flex items-center gap-2.5">
                     <span class="w-1.5 h-6 bg-emerald-500 rounded-full"></span>
                     Estado General de Documentos
                 </h3>
@@ -142,8 +153,8 @@
             </div>
 
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                <h3 class="text-lg font-bold text-blue-950 mb-6 flex items-center gap-2.5">
-                    <span class="w-1.5 h-6 bg-red-500 rounded-full"></span>
+                <h3 class="text-lg font-bold text-indigo-900 mb-6 flex items-center gap-2.5">
+                    <span class="w-1.5 h-6 bg-amber-500 rounded-full"></span>
                     Estado Operativo de Reclamos
                 </h3>
                 <div class="h-80 w-full relative">
@@ -155,14 +166,14 @@
 
         {% if current_user.rol in ['admin', 'notario'] %}
         <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-            <h3 class="text-lg font-bold text-blue-950 mb-6 flex items-center justify-between">
+            <h3 class="text-lg font-bold text-indigo-900 mb-6 flex items-center justify-between">
                 Actividad Reciente
-                <a href="{{ url_for('audits.list_audits') }}" class="text-xs text-blue-600 hover:underline">Ver historial</a>
+                <a href="{{ url_for('audits.list_audits') }}" class="text-xs text-indigo-600 hover:underline">Ver historial</a>
             </h3>
             <div class="space-y-4">
                 {% for log in recent_logs %}
                 <div class="flex gap-3 pb-4 border-b border-slate-50 last:border-0">
-                    <div class="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-[10px] font-bold text-slate-500 uppercase">
+                    <div class="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-[10px] font-bold text-indigo-700 uppercase">
                         {{ users[log.user_id].nombre[:2] if log.user_id in users else 'SY' }}
                     </div>
                     <div class="flex-1 min-w-0">
@@ -194,11 +205,11 @@
         maintainAspectRatio: false,
     };
 
-    // 1. Gráfico de Documentos (Doughnut)
+    // 1. Gráfico de Documentos (Doughnut) - colores institucionales
     const docsCtx = document.getElementById('docsChart').getContext('2d');
     const docsLabels = {{ docs_labels|tojson }};
     const docsValues = {{ docs_values|tojson }};
-    const docsColors = ['#1e293b', '#10b981', '#f59e0b', '#ef4444']; // Slate, Emerald, Amber, Red
+    const docsColors = ['#4338ca', '#10b981', '#f59e0b', '#ef4444']; // Indigo, Emerald, Amber, Red
 
     new Chart(docsCtx, {
         type: 'doughnut',
@@ -208,7 +219,7 @@
                 data: docsValues,
                 backgroundColor: docsColors,
                 borderWidth: 0,
-                cutout: '75%' // Hace el anillo más fino
+                cutout: '75%'
             }]
         },
         options: {
@@ -225,7 +236,7 @@
                     }
                 },
                 tooltip: {
-                    backgroundColor: '#1e293b', // slate-800
+                    backgroundColor: '#1e293b',
                     titleFont: { size: 13 },
                     bodyFont: { size: 12 },
                     padding: 10,
@@ -235,7 +246,7 @@
         }
     });
 
-    // 2. Gráfico de Reclamos (Bar)
+    // 2. Gráfico de Reclamos (Bar) - color ámbar para coherencia
     const complaintsCtx = document.getElementById('complaintsChart').getContext('2d');
     const complaintsLabels = {{ complaints_labels|tojson }};
     const complaintsValues = {{ complaints_values|tojson }};
@@ -246,10 +257,10 @@
             labels: complaintsLabels,
             datasets: [{
                 data: complaintsValues,
-                backgroundColor: '#ef4444', // Rojo para reclamos
+                backgroundColor: '#f59e0b', // Ámbar
                 borderRadius: 5,
                 borderSkipped: false,
-                barThickness: 35 // Barras más estilizadas
+                barThickness: 35
             }]
         },
         options: {
@@ -265,13 +276,13 @@
             scales: {
                 x: {
                     grid: { display: false },
-                    ticks: { font: { size: 11, weight: '500' }, color: '#475569' } // slate-600
+                    ticks: { font: { size: 11, weight: '500' }, color: '#475569' }
                 },
                 y: {
                     beginAtZero: true,
                     ticks: { stepSize: 1, font: { size: 11 } },
-                    grid: { color: '#f1f5f9' }, // slate-100 (muy sutil)
-                    border: { dash: [4, 4] } // Línea base discontinua
+                    grid: { color: '#f1f5f9' },
+                    border: { dash: [4, 4] }
                 }
             }
         }

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Categorías de Servicios</h1>
+        <a href="{{ url_for('admin.new_category') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl transition">+ Nueva categoría</a>
+    </div>
+    <div class="bg-white shadow rounded-xl overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nombre</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Descripción</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estado</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Orden</th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for cat in categories %}
+                <tr>
+                    <td class="px-6 py-4">{{ cat.nombre }}</td>
+                    <td class="px-6 py-4">{{ cat.descripcion[:50] }}{% if cat.descripcion|length > 50 %}...{% endif %}</td>
+                    <td class="px-6 py-4">
+                        {% if cat.activo %}
+                        <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Activa</span>
+                        {% else %}
+                        <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">Inactiva</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4">{{ cat.orden }}</td>
+                    <td class="px-6 py-4 text-right space-x-2">
+                        <a href="{{ url_for('admin.edit_category', id=cat.id) }}" class="text-indigo-600 hover:text-indigo-900">Editar</a>
+                        <form method="POST" action="{{ url_for('admin.toggle_category_active', id=cat.id) }}" class="inline">
+                            <button type="submit" class="text-amber-600 hover:text-amber-900">{{ 'Desactivar' if cat.activo else 'Activar' }}</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

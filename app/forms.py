@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, TextAreaField, IntegerField, SelectField, FileField, BooleanField, DateField
-from wtforms.validators import DataRequired, Email, Optional
-from wtforms.validators import ValidationError
+from wtforms.validators import DataRequired, Email, Optional, ValidationError
 from app.utils import validate_rut
 
 class LoginForm(FlaskForm):
@@ -14,7 +13,20 @@ class ServiceForm(FlaskForm):
     descripcion = TextAreaField("Descripción", validators=[Optional()])
     tarifa = IntegerField("Tarifa", validators=[DataRequired()])
     activo = BooleanField("Activo")
+    category_id = SelectField("Categoría", coerce=int, validators=[Optional()])
     submit = SubmitField("Guardar")
+
+    def __init__(self, *args, **kwargs):
+        super(ServiceForm, self).__init__(*args, **kwargs)
+        from app.models import ServiceCategory
+        self.category_id.choices = [(0, '-- Sin categoría --')] + [(c.id, c.nombre) for c in ServiceCategory.query.filter_by(activo=True).order_by(ServiceCategory.orden).all()]
+
+class CategoryForm(FlaskForm):
+    nombre = StringField("Nombre de la categoría", validators=[DataRequired()])
+    descripcion = TextAreaField("Descripción", validators=[Optional()])
+    activo = BooleanField("Activa")
+    orden = IntegerField("Orden de visualización", validators=[Optional()])
+    submit = SubmitField("Guardar categoría")
 
 class DocumentForm(FlaskForm):
     tipo_documento = StringField("Tipo de documento", validators=[DataRequired()])
@@ -36,13 +48,12 @@ class SignedUploadForm(FlaskForm):
     signed_file = FileField("Documento firmado", validators=[DataRequired()])
     submit = SubmitField("Subir firmado")
 
-# forms.py (fragmento)
 class ComplaintForm(FlaskForm):
     nombre_reclamante = StringField("Nombre", validators=[DataRequired()])
     rut_reclamante = StringField("RUT", validators=[Optional()])
     email = StringField("Correo", validators=[Optional(), Email()])
     telefono = StringField("Teléfono", validators=[Optional()])
-    nombre_funcionario = StringField("Nombre del funcionario", validators=[DataRequired()])  # <--- NUEVO
+    nombre_funcionario = StringField("Nombre del funcionario", validators=[DataRequired()])
     descripcion = TextAreaField("Descripción", validators=[DataRequired()])
     adjunto = FileField("Adjunto", validators=[Optional()])
     submit = SubmitField("Enviar reclamo")
@@ -71,8 +82,6 @@ class SanctionForm(FlaskForm):
     fecha_publicacion_fin = DateField("Fin publicación", validators=[Optional()])
     publica = BooleanField("Publicar en portal")
     submit = SubmitField("Guardar sanción")
-
-# ... (mantener lo anterior)
 
 class UserForm(FlaskForm):
     nombre = StringField("Nombre Completo", validators=[DataRequired()])
@@ -154,4 +163,4 @@ class DocumentEditForm(FlaskForm):
         
 class FirmaExternaForm(FlaskForm):
     observacion_firma = TextAreaField("Observación de envío", validators=[Optional()])
-    submit = SubmitField("Marcar como enviado a firma externa")        
+    submit = SubmitField("Marcar como enviado a firma externa")

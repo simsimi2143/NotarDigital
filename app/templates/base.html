@@ -104,6 +104,13 @@
                     <span class="text-slate-300 group-hover:text-white">⚙️ Ajustes</span>
                 </a>
                 {% endif %}
+
+                <!-- Categorías: visible para admin y notario -->
+                {% if current_user.rol in ['admin', 'notario'] %}
+                <a href="{{ url_for('admin.list_categories') }}" class="flex items-center p-3 rounded-lg hover:bg-slate-700 transition group">
+                    <span class="text-slate-300 group-hover:text-white">📂 Categorías</span>
+                </a>
+                {% endif %}
                 
                 <div class="pt-6 mt-6 border-t border-slate-700">
                     <a href="{{ url_for('auth.logout') }}" class="flex items-center p-3 rounded-lg hover:bg-red-900/30 text-red-400 transition">

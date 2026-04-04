@@ -8,3 +8,4 @@ fpdf
 SQLAlchemy
 Werkzeug
 WTForms
+email_validator

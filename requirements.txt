@@ -4,8 +4,7 @@ Flask_Login
 Flask_Migrate
 flask_sqlalchemy
 flask_wtf
+fpdf
 SQLAlchemy
 Werkzeug
 WTForms
-fpdf2
-email_validator
